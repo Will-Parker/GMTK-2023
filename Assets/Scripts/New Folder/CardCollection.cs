@@ -14,7 +14,6 @@ public class CardCollection : MonoBehaviour
         Cheated
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         cards.AddRange(transform.GetComponentsInChildren<Card>(false));
