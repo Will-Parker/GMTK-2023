@@ -6,6 +6,14 @@ public class CardCollection : MonoBehaviour
 {
     private const float CardWidth = 0.2f;
     [SerializeField] private List<Card> cards;
+
+    public enum HandQuality
+    {
+        Good,
+        Bad,
+        Cheated
+    }
+
     // Start is called before the first frame update
     void Start()
     {
