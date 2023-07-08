@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
         NoActiveGame,
         Dealing,
         Game,
-        Reveal,
+        GameEnd,
         CollectBid,
         Cleanup
     }
@@ -49,13 +49,13 @@ public class GameManager : MonoBehaviour
         switch (gamePhase)
         {
             case GamePhase.NoActiveGame:
+                gamePhase = GamePhase.Dealing;
                 gameParticipantsQueue = new Queue<AI>(gameParticipants);
                 Dealer dealer;
                 if (gameParticipantsQueue.Peek().TryGetComponent(out dealer))
                     StartCoroutine(dealer.DealCards());
                 else
                     Debug.LogError("Dealer not first in Queue");
-                gamePhase = GamePhase.Dealing;
                 break;
             case GamePhase.Dealing:
                 foreach(AI particpant in gameParticipants)
@@ -69,20 +69,23 @@ public class GameManager : MonoBehaviour
                 }
                 else
                     Debug.LogError("Dealer not first in Queue");
-                
                 break;
             case GamePhase.Game:
                 Debug.Log("Game End");
-                gamePhase = GamePhase.Reveal;
+                gamePhase = GamePhase.GameEnd;
+                foreach (AI participant in gameParticipants)
+                {
+                    if (participant.PrevAction != AI.AIActions.Fold)
+                    {
+                        participant.PutDownHand();
+                        participant.Reveal();
+                    }
+                }
+                CalcWinner();
                 break;
-            case GamePhase.Reveal:
-                gamePhase = GamePhase.CollectBid;
-                break;
-            case GamePhase.CollectBid:
-                gamePhase = GamePhase.Cleanup;
-                break;
-            case GamePhase.Cleanup:
+            case GamePhase.GameEnd:
                 gamePhase = GamePhase.NoActiveGame;
+                StartCoroutine(WaitToStartNextGame());
                 break;
         }
     }
@@ -114,5 +117,94 @@ public class GameManager : MonoBehaviour
                 gameParticipantsQueue.Enqueue(gameParticipantsQueue.Dequeue());
             }
         }
+    }
+
+    private void CalcWinner()
+    {
+        float[] winChance = new float[4] { 0, 0, 0, 0 };
+        float sum = 0;
+        foreach (AI participant in gameParticipants)
+        {
+            if (participant.PrevAction != AI.AIActions.Fold)
+            {
+                if (participant.GetAIType() != AI.AIType.Dealer)
+                {
+                    sum += participant.hand.WinWeight;
+                }
+            }
+        }
+        foreach (AI participant in gameParticipants)
+        {
+            if (participant.PrevAction != AI.AIActions.Fold && participant.GetAIType() != AI.AIType.Dealer)
+            {
+                winChance[participant.id] = participant.hand.WinWeight / sum;
+            }
+        }
+        float rand = Random.Range(0f, 1f);
+        Debug.Log(rand);
+        Debug.Log(winChance[0]);
+        Debug.Log(winChance[1]);
+        Debug.Log(winChance[2]);
+        Debug.Log(winChance[3]);
+        if (IsValInRange(rand, 0, winChance[0]))
+        {
+            StartCoroutine(HandleWin(gameParticipants.FindLast(p => p.id == 0)));
+        }
+        else if (IsValInRange(rand, winChance[0], winChance[0] + winChance[1]))
+        {
+            StartCoroutine(HandleWin(gameParticipants.FindLast(p => p.id == 1)));
+        }
+        else if (IsValInRange(rand, winChance[0] + winChance[1], winChance[0] + winChance[1] + winChance[2]))
+        {
+            StartCoroutine(HandleWin(gameParticipants.FindLast(p => p.id == 2)));
+        }
+        else
+        {
+            StartCoroutine(HandleWin(gameParticipants.FindLast(p => p.id == 3)));
+        }
+    }
+
+    private IEnumerator HandleWin(AI winner)
+    {
+        yield return new WaitForSeconds(5f);
+        int earnings = 0;
+        foreach (AI participant in gameParticipants)
+        {
+            if (participant == winner)
+            {
+                // TODO: update anim
+                participant.CurrentBet = 0;
+            }
+            else
+            {
+                // TODO: update anim
+                earnings += participant.CurrentBet;
+                participant.CurrentBet = 0;
+                participant.bettingPool.RemoveAllCoins();
+            }
+        }
+        winner.bettingPool.AddCoins(earnings / 10);
+        StartCoroutine(CleanTable());
+    }
+
+    private IEnumerator CleanTable()
+    {
+        yield return new WaitForSeconds(5f);
+        foreach (AI participant in gameParticipants)
+        {
+            participant.CleanArea();
+        }
+        TransitionToNextPhase();
+    }
+
+    private IEnumerator WaitToStartNextGame()
+    {
+        yield return new WaitForSeconds(Random.Range(3f, 7f));
+        TransitionToNextPhase();
+    }
+
+    private bool IsValInRange(float val, float minInclusive, float maxInclusive)
+    {
+        return minInclusive != maxInclusive && val >= minInclusive && val <= maxInclusive;
     }
 }

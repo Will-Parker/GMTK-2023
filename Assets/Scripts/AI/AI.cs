@@ -14,9 +14,9 @@ public class AI : MonoBehaviour
 
     public AIActions? PrevAction { get; private set; }
 
-    public int CurrentBet { get; private set; }
+    public int CurrentBet { get; set; }
 
-    private Hand hand;
+    public Hand hand { get; private set; }
 
     public int id;
 
@@ -207,6 +207,15 @@ public class AI : MonoBehaviour
     public void Reveal()
     {
         tableCards.FlipAllCards();
+    }
+
+    public void CleanArea()
+    {
+        handCards.RemoveAllCards();
+        tableCards.RemoveAllCards();
+        bettingPool.RemoveAllCoins();
+        CurrentBet = 0;
+        PrevAction = null;
     }
 
     private bool IsValInRange(float val, float minInclusive, float maxInclusive)
