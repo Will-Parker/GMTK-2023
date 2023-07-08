@@ -20,10 +20,24 @@ public class AI : MonoBehaviour
 
     public int id;
 
+    [SerializeField] private AIColor aiColor;
+    public AIColor GetAIColor() { return aiColor; }
+
     public enum AIType
     {
         Normal,
         Cheater,
+        Dealer
+    }
+
+    public enum AIColor
+    {
+        Blue,
+        Purple,
+        Pink,
+        Green,
+        Yellow,
+        Red,
         Dealer
     }
 
