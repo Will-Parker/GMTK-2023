@@ -27,6 +27,7 @@ public class Screen : MonoBehaviour
             CurrentScreen = 1;
             ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }
+
         return CurrentScreen;
     }
 
