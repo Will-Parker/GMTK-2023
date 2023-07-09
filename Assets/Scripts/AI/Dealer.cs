@@ -8,16 +8,30 @@ public class Dealer : MonoBehaviour
 
     private const int NumCardsToDeal = 2;
 
+    [SerializeField] private GameManager gm;
+
     public IEnumerator DealCards()
     {
         for (int i = 0; i < NumCardsToDeal; i++)
         {
-            foreach (AI ai in GameManager.instance.GetGameParticipants())
+            foreach (AI ai in gm.GetGameParticipants())
             {
                 ai.tableCards.AddCard(Instantiate(card));
-                yield return new WaitForSeconds(0.2f);
+                //yield return new WaitForSeconds(0.2f);
             }
         }
-        GameManager.instance.TransitionToNextPhase();
+        yield return new WaitForSeconds(0.2f);
+        gm.TransitionToNextPhase();
+    }
+
+    public IEnumerator DealCards(AI participant)
+    {
+        for (int i = 0; i < NumCardsToDeal; i++)
+        {
+            participant.tableCards.AddCard(Instantiate(card));
+            yield return new WaitForSeconds(0.2f);
+        }
+        gm.ResetGameParticipants();
+        participant.PickUpHand();
     }
 }

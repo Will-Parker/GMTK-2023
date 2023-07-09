@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 public class AI : MonoBehaviour
 {
@@ -24,10 +25,17 @@ public class AI : MonoBehaviour
     public AIColor GetAIColor() { return aiColor; }
 
     public Animator Anim { get; private set; }
+    public NavMeshAgent Agent { get; private set; }
 
     public AIState aiState;
 
     private Coroutine purpleCheatCoroutine;
+    private Coroutine checkIfCanMoveCoroutine;
+    private Coroutine pinkRedCheatCoroutine;
+
+    public GameManager gm;
+
+    private float switchTableOdds;
 
     public enum AIType
     {
@@ -95,59 +103,44 @@ public class AI : MonoBehaviour
     {
         Idle,
         ActiveTurn,
+        Moving,
+        Interrogation
     }
 
     private void Awake()
     {
         if (aiType != AIType.Dealer)
+        {
             Anim = GetComponent<Animator>();
+            Agent = GetComponent<NavMeshAgent>();
+        }
+            
     }
 
     private void Start()
     {
         CurrentBet = 0;
+        if (aiType != AIType.Dealer || (aiColor != AIColor.Pink && aiColor != AIColor.Red))
+        {
+            checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
+        }
     }
 
     private void Update()
     {
-        if (aiType == AIType.Dealer)
-            return;
-        if (aiType == AIType.Normal)
+        if (aiState == AIState.Moving)
         {
-            if (Input.GetKeyDown(KeyCode.B))
+            if (Agent.remainingDistance <= 0.1)
             {
-                Anim.SetTrigger("BadHand");
-            }
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                Anim.SetTrigger("GoodHand");
-            }
-        }
-        if (aiType == AIType.Cheater)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                Anim.SetTrigger("Cheating1");
-            }
-            if (aiColor == AIColor.Pink || aiColor == AIColor.Red)
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha2))
+                if (gm.TryAddParticipant(this))
                 {
-                    Anim.SetTrigger("Cheating2");
+                    if (aiType != AIType.Dealer || (aiColor != AIColor.Pink && aiColor != AIColor.Red))
+                    {
+                        checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
+                    }
+                    aiState = AIState.Idle;
                 }
             }
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Anim.SetTrigger("Lose");
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Anim.SetTrigger("Win");
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Anim.SetTrigger("No Reaction");
         }
     }
 
@@ -158,15 +151,15 @@ public class AI : MonoBehaviour
         {
             case AIType.Normal:
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
-                float newRaiseWeight = hand.ActionWeights[AIActions.Raise] / (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newRaiseWeight = hand.ActionWeights[AIActions.Raise] / (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float newCheckWeight = hand.ActionWeights[AIActions.Check];
-                float newFoldWeight = hand.ActionWeights[AIActions.Fold] * (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newFoldWeight = hand.ActionWeights[AIActions.Fold] * (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float sum = newRaiseWeight + newCheckWeight + newFoldWeight;
                 float raiseChance = newRaiseWeight / sum;
                 float checkChance = newCheckWeight / sum;
                 float foldChance = newFoldWeight / sum;
                 float rand = Random.Range(0f, 1f);
-                Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance + ", Check = " + checkChance + ", Fold = " + foldChance);
+                //Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance + ", Check = " + checkChance + ", Fold = " + foldChance);
                 if (IsValInRange(rand, 0, raiseChance))
                     Raise();
                 else if (IsValInRange(rand, raiseChance, raiseChance + checkChance))
@@ -176,15 +169,15 @@ public class AI : MonoBehaviour
                 break;
             case AIType.Cheater:
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
-                float newRaiseWeight2 = hand.ActionWeights[AIActions.Raise] / (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newRaiseWeight2 = hand.ActionWeights[AIActions.Raise] / (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float newCheckWeight2 = hand.ActionWeights[AIActions.Check];
-                float newFoldWeight2 = hand.ActionWeights[AIActions.Fold] * (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 10));
+                float newFoldWeight2 = hand.ActionWeights[AIActions.Fold] * (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 10));
                 float sum2 = newRaiseWeight2 + newCheckWeight2 + newFoldWeight2;
                 float raiseChance2 = newRaiseWeight2 / sum2;
                 float checkChance2 = newCheckWeight2 / sum2;
                 float foldChance2 = newFoldWeight2 / sum2;
                 float rand2 = Random.Range(0f, 1f);
-                Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance2 + ", Check = " + checkChance2 + ", Fold = " + foldChance2);
+                //Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance2 + ", Check = " + checkChance2 + ", Fold = " + foldChance2);
                 if (IsValInRange(rand2, 0, raiseChance2))
                     Raise();
                 else if (IsValInRange(rand2, raiseChance2, raiseChance2 + checkChance2))
@@ -195,20 +188,20 @@ public class AI : MonoBehaviour
             case AIType.Dealer:
                 yield return new WaitForSeconds(1f);
                 CurrentBet = 10;
-                Debug.Log("AI " + id + " set starting bet to " + CurrentBet);
+                //Debug.Log("AI " + id + " set starting bet to " + CurrentBet);
                 bettingPool.AddCoin();
                 PrevAction = AIActions.Raise;
                 break;
         }
         aiState = AIState.Idle;
-        GameManager.instance.EndTurn();
+        gm.EndTurn();
     }
 
     private void Raise()
     {
         int prevBet = CurrentBet;
-        CurrentBet = GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) + (10 * Random.Range(1, 6));
-        Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
+        CurrentBet = gm.GetGameParticipants().Max(p => p.CurrentBet) + (10 * Random.Range(1, 6));
+        //Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Raise;
     }
@@ -216,8 +209,8 @@ public class AI : MonoBehaviour
     private void Check()
     {
         int prevBet = CurrentBet;
-        CurrentBet = GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet);
-        Debug.Log("AI " + id + " Called bet to " + CurrentBet);
+        CurrentBet = gm.GetGameParticipants().Max(p => p.CurrentBet);
+        //Debug.Log("AI " + id + " Called bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Check;
     }
@@ -225,7 +218,7 @@ public class AI : MonoBehaviour
     private void Fold()
     {
         PutDownHand();
-        Debug.Log("AI " + id + " folded");
+        //Debug.Log("AI " + id + " folded");
         PrevAction = AIActions.Fold;
     }
 
@@ -245,7 +238,7 @@ public class AI : MonoBehaviour
         {
             handQuality = CardCollection.HandQuality.Good;
         }
-        Debug.Log("AI " + id + " drew a hand of " + handQuality + " quality");
+        //Debug.Log("AI " + id + " drew a hand of " + handQuality + " quality");
         if (aiType == AIType.Normal)
         {
             if (handQuality == CardCollection.HandQuality.Bad)
@@ -261,6 +254,10 @@ public class AI : MonoBehaviour
         if (aiColor == AIColor.Purple)
         {
             purpleCheatCoroutine = StartCoroutine(PurpleCheat());
+        }
+        if (aiColor == AIColor.Pink || aiColor == AIColor.Red)
+        {
+            pinkRedCheatCoroutine = StartCoroutine(PinkRedCheat());
         }
     }
 
@@ -298,6 +295,33 @@ public class AI : MonoBehaviour
         PrevAction = null;
     }
 
+    public void MoveTo(Seat seat)
+    {
+        Agent.SetDestination(seat.transform.position);
+        aiState = AIState.Moving;
+    }
+
+    private IEnumerator CheckIfCanMove()
+    {
+        float odds = 1f;
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(1f, 2f));
+            if (aiState == AIState.Idle)
+            {
+                if (Random.Range(0f, 1f) < odds)
+                {
+                    if (gm.TrySwitchTables(this))
+                    {
+                        Debug.Log("Switch Tables");
+                        StopCoroutine(checkIfCanMoveCoroutine);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     private IEnumerator PurpleCheat()
     {
         float purpleCheatOdds = hand.Quality == CardCollection.HandQuality.Good ? 0.02f : 0.1f;
@@ -313,6 +337,38 @@ public class AI : MonoBehaviour
                     hand = new Hand(CardCollection.HandQuality.Cheated);
                     StopCoroutine(purpleCheatCoroutine);
                     break;
+                }
+            }
+        }
+    }
+
+    private IEnumerator PinkRedCheat()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(3f, 5f));
+            if (aiState != AIState.Moving)
+            {
+                Debug.Log("Pink/red cheat");
+                AI other;
+                if (aiColor == AIColor.Pink)
+                {
+                    other = new List<AI>(FindObjectsOfType<AI>()).FindLast(ai => ai.aiColor == AIColor.Red);
+                }
+                else
+                {
+                    other = new List<AI>(FindObjectsOfType<AI>()).FindLast(ai => ai.aiColor == AIColor.Pink);
+                }
+                if (gm.GetGameParticipants().Max(p => p.CurrentBet) > 150)
+                {
+                    Anim.SetTrigger("Cheating1");
+                    gm.TrySwitchTables(other);
+                    
+                }
+                else
+                {
+                    Anim.SetTrigger("Cheating2");
+                    gm.TrySwitchTables(other);
                 }
             }
         }
