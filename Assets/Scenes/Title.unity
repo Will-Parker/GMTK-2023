@@ -215,7 +215,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &15590021
 GameObject:
@@ -383,7 +383,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &866143464
 GameObject:
@@ -519,6 +519,87 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 866143464}
   m_CullTransparentMesh: 1
+--- !u!1 &1171323172
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1171323174}
+  - component: {fileID: 1171323173}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1171323173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171323172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29b6db2414344c146983798ea26402bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sounds:
+  - name: Music
+    type: 0
+    clip: {fileID: 8300000, guid: b3ca21fcd29c7764fb79cf1b89a380e7, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 1
+    hasIntro: 0
+    introClip: {fileID: 0}
+    source: {fileID: 0}
+  - name: Card
+    type: 1
+    clip: {fileID: 8300000, guid: 641d06effdfa9eb45b8bd8106be5b633, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    hasIntro: 0
+    introClip: {fileID: 0}
+    source: {fileID: 0}
+  - name: Button
+    type: 1
+    clip: {fileID: 8300000, guid: 7f70fc8aa2e18b242a2ce6fe9b88978e, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    hasIntro: 0
+    introClip: {fileID: 0}
+    source: {fileID: 0}
+  - name: Chips
+    type: 1
+    clip: {fileID: 8300000, guid: bea1de814ede75c4bb11f08b56bc26d9, type: 3}
+    volume: 1
+    pitch: 1
+    loop: 0
+    hasIntro: 0
+    introClip: {fileID: 0}
+    source: {fileID: 0}
+--- !u!4 &1171323174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1171323172}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -7.6377187, y: 4.885352, z: -5.781006}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1307970119
 GameObject:
   m_ObjectHideFlags: 0
@@ -720,7 +801,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1581651690
 GameObject:
@@ -821,7 +902,7 @@ RectTransform:
   - {fileID: 15590022}
   - {fileID: 866143465}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
