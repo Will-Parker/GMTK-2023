@@ -141,11 +141,6 @@ public class GameManager : MonoBehaviour
             }
         }
         float rand = Random.Range(0f, 1f);
-        Debug.Log(rand);
-        Debug.Log(winChance[0]);
-        Debug.Log(winChance[1]);
-        Debug.Log(winChance[2]);
-        Debug.Log(winChance[3]);
         if (IsValInRange(rand, 0, winChance[0]))
         {
             StartCoroutine(HandleWin(gameParticipants.FindLast(p => p.id == 0)));
@@ -172,12 +167,14 @@ public class GameManager : MonoBehaviour
         {
             if (participant == winner)
             {
-                // TODO: update anim
+                if (participant.GetAIType() != AI.AIType.Dealer)
+                    participant.Anim.SetTrigger("Win");
                 participant.CurrentBet = 0;
             }
             else
             {
-                // TODO: update anim
+                if (participant.GetAIType() != AI.AIType.Dealer)
+                    participant.Anim.SetTrigger("Lose");
                 earnings += participant.CurrentBet;
                 participant.CurrentBet = 0;
                 participant.bettingPool.RemoveAllCoins();
@@ -193,6 +190,8 @@ public class GameManager : MonoBehaviour
         foreach (AI participant in gameParticipants)
         {
             participant.CleanArea();
+            if (participant.GetAIType() != AI.AIType.Dealer)
+                participant.Anim.SetTrigger("No Reaction");
         }
         TransitionToNextPhase();
     }

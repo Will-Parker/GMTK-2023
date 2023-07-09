@@ -9,5 +9,9 @@ AnimatorOverrideController:
   m_Name: PurpleWizard
   m_Controller: {fileID: 9100000, guid: 7e0d240689d00ce4fbe66cf2e935d017, type: 2}
   m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: d3d94cd30146ba448988b9ff74653cd5, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6108a7b0c852e2247bcac58267ab684d, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a9553b83dcb99b449b0049884972a8a7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 4c08f52ed7c38ee4fa1869acfe2b6f4f, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 95cdc9ddd112cd14a9e3a4fa8a6d3eb8, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: d6107d2aa2e89324eb3d4a448dc1926a, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 9e1d4aeb910df954d97798b6f9ee2aa7, type: 2}
