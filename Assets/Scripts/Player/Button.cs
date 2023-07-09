@@ -15,16 +15,13 @@ public class Buttons : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        for(int i = 0; i < AiArray.Length; i++)
-        {
-            AiArray[i].id = i;
-        }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        List<AI> TableList = gm[player.CurrentScreen].GetGameParticipants();
+        List<Seat> TableList = gm[player.CurrentScreen].seats;
         string ButtonName = "None";
         if(Input.GetMouseButtonDown(0))
         {
@@ -37,42 +34,42 @@ public class Buttons : MonoBehaviour
             switch(ButtonName)
             {
                 case "LeftButton":
-                    if (TableList.Count > 1)
+                    if (TableList[0].participant != null && TableList.Count > 1)
                     {
-                        DetainPlayer(TableList[1]);
+                        DetainPlayer(TableList[0].participant);
                     }
                     break;
                 case "MiddleButton":
-                    if (TableList.Count > 2)
+                    if (TableList[1].participant != null && TableList.Count > 2)
                     {
-                        DetainPlayer(TableList[2]);
+                        DetainPlayer(TableList[1].participant);
                     }
                     break;
                 case "RightButton":
-                    if (TableList.Count > 3)
+                    if (TableList[2].participant != null && TableList.Count > 3)
                     {
-                        DetainPlayer(TableList[3]);
+                        DetainPlayer(TableList[2].participant);
                     }
                     break;
             }
         } else if(Input.GetKeyDown(KeyCode.Z))
         {
-            if (TableList.Count > 1)
+            if (TableList[0].participant != null && TableList.Count >= 1)
             {
-                DetainPlayer(TableList[1]);
+                DetainPlayer(TableList[0].participant);
             }
         } else if (Input.GetKeyDown(KeyCode.X))
         {
-            if(TableList.Count > 2)
+            if(TableList[1].participant != null && TableList.Count >= 2)
             {
-                DetainPlayer(TableList[2]);
+                DetainPlayer(TableList[1].participant);
             }
             
-        } else if (Input.GetKeyDown(KeyCode.C))
+        } else if (Input.GetKeyDown(KeyCode.C) )
         {
-            if (TableList.Count > 3)
+            if (TableList[2].participant != null && TableList.Count >= 3)
             {
-                DetainPlayer(TableList[3]);
+                DetainPlayer(TableList[2].participant);
             }
         }
     }
