@@ -20,24 +20,22 @@ public class Screen : MonoBehaviour
         
     }
 
-    public int NextScreen()
+    public void NextScreen()
     {
         if(CurrentScreen == 0)
         {
             CurrentScreen = 1;
             ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }
-        return CurrentScreen;
     }
 
-    public int PrevScreen()
+    public void PrevScreen()
     {
         if (CurrentScreen == 1)
         {
             CurrentScreen = 0;
             ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }
-        return CurrentScreen;
     }
 
 
