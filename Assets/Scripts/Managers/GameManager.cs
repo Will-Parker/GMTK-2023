@@ -5,8 +5,8 @@ using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private List<AI> gameParticipants;
-    private Queue<AI> gameParticipantsQueue;
+    [SerializeField] public List<AI> gameParticipants;
+    public Queue<AI> gameParticipantsQueue;
     public List<AI> GetGameParticipants() { return gameParticipants; }
     public List<Seat> seats;
     private GamePhase gamePhase;

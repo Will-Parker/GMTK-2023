@@ -15,7 +15,10 @@ public class Buttons : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        for(int i = 0; i < AiArray.Length; i++)
+        {
+            AiArray[i].id = i;
+        }
     }
 
     // Update is called once per frame
@@ -72,9 +75,6 @@ public class Buttons : MonoBehaviour
                 DetainPlayer(TableList[3]);
             }
         }
-
-
-
     }
 
     void DetainPlayer(AI ai)

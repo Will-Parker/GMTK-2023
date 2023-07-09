@@ -142,6 +142,19 @@ public class AI : MonoBehaviour
                 }
             }
         }
+        if (AiState == AIState.Detained)
+        {
+            if (aiType == AIType.Cheater)
+            {
+                gm.gameParticipants.Remove(this);
+                gm.ResetGameParticipants();
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                AiState = AIState.Idle;
+            }
+        }
     }
 
     public IEnumerator PerformTurn()
@@ -204,6 +217,7 @@ public class AI : MonoBehaviour
         //Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Raise;
+        AudioManager.instance.Play("Chips");
     }
 
     private void Check()
@@ -213,6 +227,7 @@ public class AI : MonoBehaviour
         //Debug.Log("AI " + id + " Called bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Check;
+        AudioManager.instance.Play("Chips");
     }
 
     private void Fold()
@@ -259,6 +274,7 @@ public class AI : MonoBehaviour
         {
             pinkRedCheatCoroutine = StartCoroutine(PinkRedCheat());
         }
+        AudioManager.instance.Play("Card");
     }
 
     public void PutDownHand()
@@ -273,15 +289,18 @@ public class AI : MonoBehaviour
         {
             card.GetComponentsInChildren<MeshRenderer>().All(mr => mr.enabled = true);
         }
+        AudioManager.instance.Play("Card");
     }
 
     public void Reveal()
     {
         tableCards.FlipAllCards();
+        AudioManager.instance.Play("Card");
     }
 
     public void CleanArea()
     {
+        
         foreach (Card card in handCards.RemoveAllCards())
         {
             Destroy(card.gameObject);
@@ -293,6 +312,8 @@ public class AI : MonoBehaviour
         bettingPool.RemoveAllCoins();
         CurrentBet = 0;
         PrevAction = null;
+        AudioManager.instance.Play("Card");
+        AudioManager.instance.Play("Chips");
     }
 
     public void MoveTo(Seat seat)
