@@ -152,6 +152,7 @@ public class AI : MonoBehaviour
             }
             else
             {
+                FindObjectOfType<WinLoseTracker>().remainingGameLength -= 180 * 1000;
                 AiState = AIState.Idle;
             }
         }
@@ -367,7 +368,7 @@ public class AI : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(3f, 5f));
+            yield return new WaitForSeconds(Random.Range(5f, 7f));
             if (AiState != AIState.Moving)
             {
                 Debug.Log("Pink/red cheat");
@@ -382,13 +383,14 @@ public class AI : MonoBehaviour
                 }
                 if (gm.GetGameParticipants().Max(p => p.CurrentBet) > 150)
                 {
-                    Anim.SetTrigger("Cheating1");
+                    if (Random.Range(0f, 1f) < 0.2f)
+                        Anim.SetTrigger("Cheating1");
                     gm.TrySwitchTables(other);
-                    
                 }
                 else
                 {
-                    Anim.SetTrigger("Cheating2");
+                    if (Random.Range(0f, 1f) < 0.2f)
+                        Anim.SetTrigger("Cheating2");
                     gm.TrySwitchTables(other);
                 }
             }

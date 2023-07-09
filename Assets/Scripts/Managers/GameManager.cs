@@ -29,14 +29,7 @@ public class GameManager : MonoBehaviour
         {
             TryAddParticipant(participant);
         }
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TransitionToNextPhase();
-        }
+        TransitionToNextPhase();
     }
 
     public void TransitionToNextPhase()
