@@ -9,7 +9,8 @@ public class Buttons : MonoBehaviour
     //
     // Table1: Left Middle Right
     // Table2: Left Middle Right
-    [SerializeField] public AI[] AiArray;
+    //[SerializeField] public AI[] AiArray;
+    [SerializeField] public GameManager[] gm;
     [SerializeField] private Player player;
     // Start is called before the first frame update
     void Start()
@@ -23,6 +24,7 @@ public class Buttons : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        List<AI> TableList = gm[player.CurrentScreen].GetGameParticipants();
         string ButtonName = "None";
         if(Input.GetMouseButtonDown(0))
         {
@@ -35,14 +37,42 @@ public class Buttons : MonoBehaviour
             switch(ButtonName)
             {
                 case "LeftButton":
-                    DetainPlayer(AiArray[player.CurrentScreen * 3]);
+                    if (TableList.Count > 1)
+                    {
+                        DetainPlayer(TableList[1]);
+                    }
                     break;
                 case "MiddleButton":
-                    DetainPlayer(AiArray[(player.CurrentScreen * 3) + 1]);
+                    if (TableList.Count > 2)
+                    {
+                        DetainPlayer(TableList[2]);
+                    }
                     break;
                 case "RightButton":
-                    DetainPlayer(AiArray[(player.CurrentScreen * 3) + 2]);
+                    if (TableList.Count > 3)
+                    {
+                        DetainPlayer(TableList[3]);
+                    }
                     break;
+            }
+        } else if(Input.GetKeyDown(KeyCode.Z))
+        {
+            if (TableList.Count > 1)
+            {
+                DetainPlayer(TableList[1]);
+            }
+        } else if (Input.GetKeyDown(KeyCode.X))
+        {
+            if(TableList.Count > 2)
+            {
+                DetainPlayer(TableList[2]);
+            }
+            
+        } else if (Input.GetKeyDown(KeyCode.C))
+        {
+            if (TableList.Count > 3)
+            {
+                DetainPlayer(TableList[3]);
             }
         }
     }
@@ -56,5 +86,6 @@ public class Buttons : MonoBehaviour
         }
         ai.AiState = AI.AIState.Detained;
         Debug.Log("AI " + ai.id + " has been " + ai.AiState);
+        return;
     }
 }
