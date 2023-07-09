@@ -5,17 +5,24 @@ using UnityEngine.SceneManagement;
 
 public class GameScreen : MonoBehaviour
 {
+    private void Start()
+    {
+        AudioManager.instance.Play("Music");
+    }
     public void LoadGame()
     {
+        AudioManager.instance.Play("Button");
         SceneManager.LoadScene(1);
     }
     public void ExitGame()
     {
+        AudioManager.instance.Play("Button");
         Application.Quit();
     }
 
     public void ToTitle()
     {
+        AudioManager.instance.Play("Button");
         SceneManager.LoadScene(0);
     }
 }
