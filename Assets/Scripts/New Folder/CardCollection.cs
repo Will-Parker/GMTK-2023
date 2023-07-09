@@ -7,6 +7,8 @@ public class CardCollection : MonoBehaviour
     private const float CardWidth = 0.2f;
     [SerializeField] private List<Card> cards;
 
+    public bool isTableCards;
+
     public enum HandQuality
     {
         Good,
