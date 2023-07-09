@@ -22,22 +22,21 @@ public class Screen : MonoBehaviour
 
     public int NextScreen()
     {
-        CurrentScreen += 1;
-        if (CurrentScreen >= ScreenMats.Length) {
-            CurrentScreen = 0;
+        if(CurrentScreen == 0)
+        {
+            CurrentScreen = 1;
+            ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }
-        ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         return CurrentScreen;
     }
 
     public int PrevScreen()
     {
-        CurrentScreen -= 1;
-        if (CurrentScreen < 0)
+        if (CurrentScreen == 1)
         {
-            CurrentScreen = ScreenMats.Length - 1;
+            CurrentScreen = 0;
+            ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }
-        ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         return CurrentScreen;
     }
 
