@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.AI;
 
 public class AI : MonoBehaviour
 {
@@ -24,12 +25,16 @@ public class AI : MonoBehaviour
     public AIColor GetAIColor() { return aiColor; }
 
     public Animator Anim { get; private set; }
+    public NavMeshAgent Agent { get; private set; }
 
     public AIState aiState;
 
     private Coroutine purpleCheatCoroutine;
+    private Coroutine checkIfCanMoveCoroutine;
 
-    [SerializeField] private GameManager gm;
+    public GameManager gm;
+
+    private float switchTableOdds;
 
     public enum AIType
     {
@@ -104,19 +109,37 @@ public class AI : MonoBehaviour
     private void Awake()
     {
         if (aiType != AIType.Dealer)
+        {
             Anim = GetComponent<Animator>();
+            Agent = GetComponent<NavMeshAgent>();
+        }
+            
     }
 
     private void Start()
     {
         CurrentBet = 0;
+        if (aiType != AIType.Dealer)
+        {
+            checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
+        }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        if (aiState == AIState.Moving)
         {
-            Debug.Log("move guy");
+            if (Agent.remainingDistance <= 0.1)
+            {
+                if (gm.TryAddParticipant(this))
+                {
+                    if (aiType != AIType.Dealer)
+                    {
+                        checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
+                    }
+                    aiState = AIState.Idle;
+                }
+            }
         }
     }
 
@@ -135,7 +158,7 @@ public class AI : MonoBehaviour
                 float checkChance = newCheckWeight / sum;
                 float foldChance = newFoldWeight / sum;
                 float rand = Random.Range(0f, 1f);
-                Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance + ", Check = " + checkChance + ", Fold = " + foldChance);
+                //Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance + ", Check = " + checkChance + ", Fold = " + foldChance);
                 if (IsValInRange(rand, 0, raiseChance))
                     Raise();
                 else if (IsValInRange(rand, raiseChance, raiseChance + checkChance))
@@ -153,7 +176,7 @@ public class AI : MonoBehaviour
                 float checkChance2 = newCheckWeight2 / sum2;
                 float foldChance2 = newFoldWeight2 / sum2;
                 float rand2 = Random.Range(0f, 1f);
-                Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance2 + ", Check = " + checkChance2 + ", Fold = " + foldChance2);
+                //Debug.Log("AI " + id + " probabilities: Raise = " + raiseChance2 + ", Check = " + checkChance2 + ", Fold = " + foldChance2);
                 if (IsValInRange(rand2, 0, raiseChance2))
                     Raise();
                 else if (IsValInRange(rand2, raiseChance2, raiseChance2 + checkChance2))
@@ -164,7 +187,7 @@ public class AI : MonoBehaviour
             case AIType.Dealer:
                 yield return new WaitForSeconds(1f);
                 CurrentBet = 10;
-                Debug.Log("AI " + id + " set starting bet to " + CurrentBet);
+                //Debug.Log("AI " + id + " set starting bet to " + CurrentBet);
                 bettingPool.AddCoin();
                 PrevAction = AIActions.Raise;
                 break;
@@ -177,7 +200,7 @@ public class AI : MonoBehaviour
     {
         int prevBet = CurrentBet;
         CurrentBet = gm.GetGameParticipants().Max(p => p.CurrentBet) + (10 * Random.Range(1, 6));
-        Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
+        //Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Raise;
     }
@@ -186,7 +209,7 @@ public class AI : MonoBehaviour
     {
         int prevBet = CurrentBet;
         CurrentBet = gm.GetGameParticipants().Max(p => p.CurrentBet);
-        Debug.Log("AI " + id + " Called bet to " + CurrentBet);
+        //Debug.Log("AI " + id + " Called bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Check;
     }
@@ -194,7 +217,7 @@ public class AI : MonoBehaviour
     private void Fold()
     {
         PutDownHand();
-        Debug.Log("AI " + id + " folded");
+        //Debug.Log("AI " + id + " folded");
         PrevAction = AIActions.Fold;
     }
 
@@ -214,7 +237,7 @@ public class AI : MonoBehaviour
         {
             handQuality = CardCollection.HandQuality.Good;
         }
-        Debug.Log("AI " + id + " drew a hand of " + handQuality + " quality");
+        //Debug.Log("AI " + id + " drew a hand of " + handQuality + " quality");
         if (aiType == AIType.Normal)
         {
             if (handQuality == CardCollection.HandQuality.Bad)
@@ -265,6 +288,33 @@ public class AI : MonoBehaviour
         bettingPool.RemoveAllCoins();
         CurrentBet = 0;
         PrevAction = null;
+    }
+
+    public void MoveTo(Seat seat)
+    {
+        Agent.SetDestination(seat.transform.position);
+        aiState = AIState.Moving;
+    }
+
+    private IEnumerator CheckIfCanMove()
+    {
+        float odds = 1f;
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(1f, 2f));
+            if (aiState == AIState.Idle)
+            {
+                if (Random.Range(0f, 1f) < odds)
+                {
+                    if (gm.TrySwitchTables(this))
+                    {
+                        Debug.Log("Switch Tables");
+                        StopCoroutine(checkIfCanMoveCoroutine);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private IEnumerator PurpleCheat()

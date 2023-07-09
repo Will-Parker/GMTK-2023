@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private List<AI> gameParticipants;
     private Queue<AI> gameParticipantsQueue;
     public List<AI> GetGameParticipants() { return gameParticipants; }
-    public List<GameObject> seats;
+    public List<Seat> seats;
     private GamePhase gamePhase;
+    public GameManager otherGame;
 
     public enum GamePhase
     {
@@ -23,11 +25,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         //Time.timeScale = 20f;
-        foreach (GameObject seat in seats)
+        foreach (AI participant in FindObjectsOfType<AI>())
         {
-            AI participant = seat.GetComponentInChildren<AI>();
-            gameParticipants.Add(participant);
-            participant.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            TryAddParticipant(participant);
         }
     }
 
@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour
             case GamePhase.NoActiveGame:
                 gamePhase = GamePhase.Dealing;
                 gameParticipantsQueue = new Queue<AI>(gameParticipants);
+                ResetGameParticipants();
                 Dealer dealer;
                 if (gameParticipantsQueue.Peek().TryGetComponent(out dealer))
                     StartCoroutine(dealer.DealCards());
@@ -66,7 +67,7 @@ public class GameManager : MonoBehaviour
                     Debug.LogError("Dealer not first in Queue");
                 break;
             case GamePhase.Game:
-                Debug.Log("Game End");
+                //Debug.Log("Game End");
                 gamePhase = GamePhase.GameEnd;
                 foreach (AI participant in gameParticipants)
                 {
@@ -112,6 +113,114 @@ public class GameManager : MonoBehaviour
                 gameParticipantsQueue.Enqueue(gameParticipantsQueue.Dequeue());
             }
         }
+    }
+
+    public bool TrySwitchTables(AI participant)
+    {
+        if (participant.PrevAction == AI.AIActions.Fold || gamePhase == GamePhase.NoActiveGame)
+        {
+            if (otherGame.gamePhase == GamePhase.NoActiveGame)
+            {
+                foreach (Seat newSeat in otherGame.seats)
+                {
+                    if (newSeat.participant == null)
+                    {
+                        Seat currSeat = seats.Find(x => x.id == participant.id);
+                        
+                        int a = participant.CurrentBet;
+                        participant.bettingPool.RemoveAllCoins();
+                        gameParticipants[0].bettingPool.AddCoins(a / 10);
+                        gameParticipants[0].CurrentBet = a;
+                        participant.CleanArea();
+                        currSeat.RemoveParticipant(participant);
+                        participant.MoveTo(newSeat);
+                        newSeat.participant = participant;
+                        participant.gm = otherGame;
+                        gameParticipants.Remove(participant);
+                        return true;
+                    }
+                    else if (newSeat.participant.PrevAction == AI.AIActions.Fold)
+                    {
+                        AI otherParticipant = newSeat.participant;
+                        Seat currSeat = seats.Find(x => x.id == participant.id);
+
+                        int a = participant.CurrentBet;
+                        participant.bettingPool.RemoveAllCoins();
+                        gameParticipants[0].bettingPool.AddCoins(a / 10);
+                        gameParticipants[0].CurrentBet = a;
+                        participant.CleanArea();
+
+                        int b = otherParticipant.CurrentBet;
+                        otherParticipant.bettingPool.RemoveAllCoins();
+                        otherGame.gameParticipants[0].bettingPool.AddCoins(a / 10);
+                        otherGame.gameParticipants[0].CurrentBet = a;
+                        otherParticipant.CleanArea();
+
+                        currSeat.RemoveParticipant(participant);
+                        newSeat.RemoveParticipant(otherParticipant);
+                        participant.MoveTo(newSeat);
+                        otherParticipant.MoveTo(currSeat);
+                        newSeat.participant = participant;
+                        currSeat.participant = otherParticipant;
+                        participant.gm = otherGame;
+                        otherParticipant.gm = this;
+                        gameParticipants.Remove(participant);
+                        otherGame.gameParticipants.Remove(otherParticipant);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public bool TryAddParticipant(AI participant)
+    {
+        foreach (Seat seat in seats)
+        {
+            if (Vector3.Distance(participant.transform.position, seat.transform.position) <= 0.1)
+            {
+                seat.AddParticipant(participant);
+                gameParticipants.Add(participant);
+                participant.gm = this;
+                if (gamePhase == GamePhase.Game)
+                {
+                    if (gameParticipants[0].TryGetComponent(out Dealer dealer))
+                        StartCoroutine(dealer.DealCards(participant));
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void ResetGameParticipants()
+    {
+        AI currPlayer = gameParticipantsQueue.Peek();
+        List<AI> arrCopy = new List<AI>(gameParticipants);
+        List<AI> temp = new List<AI>();
+        while (arrCopy.Count > 0)
+        {
+            AI minEl = arrCopy.Aggregate((curMin, x) => (curMin == null || x.id < curMin.id ? x : curMin));
+            temp.Add(minEl);
+            arrCopy.Remove(minEl);
+        }
+        gameParticipants = temp;
+        //Debug.Log(gameParticipants.Count);
+        Queue<AI> q = new Queue<AI>();
+        foreach (AI participant in gameParticipants)
+        {
+            if (participant.PrevAction != AI.AIActions.Fold)
+            {
+                q.Enqueue(participant);
+            }
+        }
+        while (q.Peek() != currPlayer)
+        {
+            q.Enqueue(q.Dequeue());
+        }
+        gameParticipantsQueue = q;
     }
 
     private void CalcWinner()
@@ -194,6 +303,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator WaitToStartNextGame()
     {
         yield return new WaitForSeconds(Random.Range(3f, 7f));
+        //yield return new WaitForSeconds(20f);
         TransitionToNextPhase();
     }
 

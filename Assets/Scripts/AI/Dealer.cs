@@ -22,4 +22,15 @@ public class Dealer : MonoBehaviour
         }
         gm.TransitionToNextPhase();
     }
+
+    public IEnumerator DealCards(AI participant)
+    {
+        for (int i = 0; i < NumCardsToDeal; i++)
+        {
+            participant.tableCards.AddCard(Instantiate(card));
+            yield return new WaitForSeconds(0.2f);
+        }
+        gm.ResetGameParticipants();
+        participant.PickUpHand();
+    }
 }

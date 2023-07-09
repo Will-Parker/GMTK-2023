@@ -1,5 +1,97 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &197035094270485687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1796132757082143695}
+  - component: {fileID: 6002063745680857898}
+  m_Layer: 0
+  m_Name: Betting Pool (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1796132757082143695
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197035094270485687}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5, y: -0.19999999, z: -0.79999995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1485826650707977157}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6002063745680857898
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197035094270485687}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8268d2b169d12c4aa3b0339fee0256e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coins: []
+  coin: {fileID: 551033089147213923, guid: 3eee2e4209d2144428ea4d1f93f46723, type: 3}
+--- !u!1 &409754531564951371
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 913857530362976785}
+  - component: {fileID: 2185804323436632926}
+  m_Layer: 0
+  m_Name: Betting Pool (0)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &913857530362976785
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409754531564951371}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0}
+  m_LocalPosition: {x: 0.5, y: -0.19999999, z: 1.177}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7004512196486849173}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2185804323436632926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409754531564951371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8268d2b169d12c4aa3b0339fee0256e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coins: []
+  coin: {fileID: 551033089147213923, guid: 3eee2e4209d2144428ea4d1f93f46723, type: 3}
 --- !u!1 &532877038613111146
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,6 +101,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4013473783075203283}
+  - component: {fileID: 7144520382915533070}
   m_Layer: 0
   m_Name: Seat 1
   m_TagString: Untagged
@@ -27,10 +120,28 @@ Transform:
   m_LocalPosition: {x: -1.5, y: 0, z: 1.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5630882482989831773}
+  - {fileID: 4664431488463428245}
   m_Father: {fileID: 7004512196486849173}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
+--- !u!114 &7144520382915533070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 532877038613111146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d767610cd05fb54992849bd0546ffee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 1
+  tableCards: {fileID: 3929996389202731557}
+  bettingPool: {fileID: 7708467344993619416}
+  participant: {fileID: 0}
 --- !u!1 &1225904727413701240
 GameObject:
   m_ObjectHideFlags: 0
@@ -180,6 +291,236 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0b09e7857660247b1477e93731de29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3285735099892955345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9192378206783057120}
+  - component: {fileID: 177591581251699279}
+  m_Layer: 0
+  m_Name: Table Cards (0)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9192378206783057120
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3285735099892955345}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: 0.7071068, w: 0}
+  m_LocalPosition: {x: 0, y: -0.19, z: 1.1499999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7004512196486849173}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &177591581251699279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3285735099892955345}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e5bc79735be7341949677da9dfe278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards: []
+  isTableCards: 0
+--- !u!1 &3771218542018563725
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7020967883830712556}
+  - component: {fileID: 1410702795406817011}
+  m_Layer: 0
+  m_Name: Table Cards (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7020967883830712556
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771218542018563725}
+  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.19, z: -0.60000014}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1485826650707977157}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &1410702795406817011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771218542018563725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e5bc79735be7341949677da9dfe278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards: []
+  isTableCards: 1
+--- !u!1 &3850356503450327181
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5630882482989831773}
+  - component: {fileID: 3929996389202731557}
+  m_Layer: 0
+  m_Name: Table Cards (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5630882482989831773
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3850356503450327181}
+  m_LocalRotation: {x: -0.7071068, y: 0.000000029802319, z: 0.000000029802319, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.19, z: -0.6000001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4013473783075203283}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &3929996389202731557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3850356503450327181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e5bc79735be7341949677da9dfe278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards: []
+  isTableCards: 1
+--- !u!1 &3925701050688498276
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8514816043912877407}
+  - component: {fileID: 3575690998062733179}
+  m_Layer: 0
+  m_Name: Betting Pool (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8514816043912877407
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3925701050688498276}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.29999998, y: -0.19999999, z: -0.8}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7240927091587134916}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3575690998062733179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3925701050688498276}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8268d2b169d12c4aa3b0339fee0256e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coins: []
+  coin: {fileID: 551033089147213923, guid: 3eee2e4209d2144428ea4d1f93f46723, type: 3}
+--- !u!1 &3990821040903290574
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1873184481438135310}
+  - component: {fileID: 735354586552083299}
+  m_Layer: 0
+  m_Name: Table Cards (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1873184481438135310
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3990821040903290574}
+  m_LocalRotation: {x: -0.7071068, y: -0.000000029802319, z: -0.000000029802319, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.19, z: -0.6000001}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7240927091587134916}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!114 &735354586552083299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3990821040903290574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34e5bc79735be7341949677da9dfe278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cards: []
+  isTableCards: 1
 --- !u!1 &4200862672328079296
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,6 +556,52 @@ Transform:
   m_Father: {fileID: 7004512196486849173}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &4311643576803233879
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4664431488463428245}
+  - component: {fileID: 7708467344993619416}
+  m_Layer: 0
+  m_Name: Betting Pool (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4664431488463428245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311643576803233879}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.5, y: -0.19999999, z: -0.79999995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4013473783075203283}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7708467344993619416
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4311643576803233879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8268d2b169d12c4aa3b0339fee0256e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  coins: []
+  coin: {fileID: 551033089147213923, guid: 3eee2e4209d2144428ea4d1f93f46723, type: 3}
 --- !u!1 &4324558921442300416
 GameObject:
   m_ObjectHideFlags: 0
@@ -330,6 +717,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1485826650707977157}
+  - component: {fileID: 363093306479777894}
   m_Layer: 0
   m_Name: Seat 2
   m_TagString: Untagged
@@ -348,10 +736,28 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 2.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7020967883830712556}
+  - {fileID: 1796132757082143695}
   m_Father: {fileID: 7004512196486849173}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &363093306479777894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4518837384263678855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d767610cd05fb54992849bd0546ffee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 2
+  tableCards: {fileID: 1410702795406817011}
+  bettingPool: {fileID: 6002063745680857898}
+  participant: {fileID: 0}
 --- !u!1 &5479085882972323783
 GameObject:
   m_ObjectHideFlags: 0
@@ -387,6 +793,8 @@ Transform:
   - {fileID: 1485826650707977157}
   - {fileID: 7240927091587134916}
   - {fileID: 6206903192885820610}
+  - {fileID: 9192378206783057120}
+  - {fileID: 913857530362976785}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -405,9 +813,10 @@ MonoBehaviour:
   gameParticipants:
   - {fileID: 9172928472773916285}
   seats:
-  - {fileID: 532877038613111146}
-  - {fileID: 4518837384263678855}
-  - {fileID: 9106860443566301514}
+  - {fileID: 7144520382915533070}
+  - {fileID: 363093306479777894}
+  - {fileID: 9193736042411572136}
+  otherGame: {fileID: 0}
 --- !u!1 &6745858987451734671
 GameObject:
   m_ObjectHideFlags: 0
@@ -699,6 +1108,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7240927091587134916}
+  - component: {fileID: 9193736042411572136}
   m_Layer: 0
   m_Name: Seat 3
   m_TagString: Untagged
@@ -717,10 +1127,28 @@ Transform:
   m_LocalPosition: {x: 1.5, y: 0, z: 1.73}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1873184481438135310}
+  - {fileID: 8514816043912877407}
   m_Father: {fileID: 7004512196486849173}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!114 &9193736042411572136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9106860443566301514}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d767610cd05fb54992849bd0546ffee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 3
+  tableCards: {fileID: 735354586552083299}
+  bettingPool: {fileID: 3575690998062733179}
+  participant: {fileID: 0}
 --- !u!1001 &2019945806989371037
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -733,6 +1161,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dealer
       objectReference: {fileID: 0}
+    - target: {fileID: 4102926467514650506, guid: 5b03843308f9c874ba319d31afb3dd60, type: 3}
+      propertyPath: gm
+      value: 
+      objectReference: {fileID: 6464540512716953040}
     - target: {fileID: 5344386905357572703, guid: 5b03843308f9c874ba319d31afb3dd60, type: 3}
       propertyPath: m_RootOrder
       value: -1
@@ -777,6 +1209,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7152987084303978720, guid: 5b03843308f9c874ba319d31afb3dd60, type: 3}
+      propertyPath: gm
+      value: 
+      objectReference: {fileID: 6464540512716953040}
+    - target: {fileID: 7152987084303978720, guid: 5b03843308f9c874ba319d31afb3dd60, type: 3}
+      propertyPath: tableCards
+      value: 
+      objectReference: {fileID: 177591581251699279}
+    - target: {fileID: 7152987084303978720, guid: 5b03843308f9c874ba319d31afb3dd60, type: 3}
+      propertyPath: bettingPool
+      value: 
+      objectReference: {fileID: 2185804323436632926}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
