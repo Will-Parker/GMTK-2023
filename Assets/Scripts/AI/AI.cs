@@ -27,7 +27,7 @@ public class AI : MonoBehaviour
     public Animator Anim { get; private set; }
     public NavMeshAgent Agent { get; private set; }
 
-    public AIState aiState;
+    public AIState AiState;
 
     private Coroutine purpleCheatCoroutine;
     private Coroutine checkIfCanMoveCoroutine;
@@ -104,7 +104,7 @@ public class AI : MonoBehaviour
         Idle,
         ActiveTurn,
         Moving,
-        Interrogation
+        Detained
     }
 
     private void Awake()
@@ -128,7 +128,7 @@ public class AI : MonoBehaviour
 
     private void Update()
     {
-        if (aiState == AIState.Moving)
+        if (AiState == AIState.Moving)
         {
             if (Agent.remainingDistance <= 0.1)
             {
@@ -138,7 +138,7 @@ public class AI : MonoBehaviour
                     {
                         checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
                     }
-                    aiState = AIState.Idle;
+                    AiState = AIState.Idle;
                 }
             }
         }
@@ -146,7 +146,7 @@ public class AI : MonoBehaviour
 
     public IEnumerator PerformTurn()
     {
-        aiState = AIState.ActiveTurn;
+        AiState = AIState.ActiveTurn;
         switch (aiType)
         {
             case AIType.Normal:
@@ -193,7 +193,7 @@ public class AI : MonoBehaviour
                 PrevAction = AIActions.Raise;
                 break;
         }
-        aiState = AIState.Idle;
+        AiState = AIState.Idle;
         gm.EndTurn();
     }
 
@@ -298,7 +298,7 @@ public class AI : MonoBehaviour
     public void MoveTo(Seat seat)
     {
         Agent.SetDestination(seat.transform.position);
-        aiState = AIState.Moving;
+        AiState = AIState.Moving;
     }
 
     private IEnumerator CheckIfCanMove()
@@ -307,7 +307,7 @@ public class AI : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(1f, 2f));
-            if (aiState == AIState.Idle)
+            if (AiState == AIState.Idle)
             {
                 if (Random.Range(0f, 1f) < odds)
                 {
@@ -328,7 +328,7 @@ public class AI : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(2f, 4f));
-            if (aiState != AIState.ActiveTurn)
+            if (AiState != AIState.ActiveTurn)
             {
                 if (Random.Range(0f, 1f) < purpleCheatOdds)
                 {
@@ -347,7 +347,7 @@ public class AI : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(3f, 5f));
-            if (aiState != AIState.Moving)
+            if (AiState != AIState.Moving)
             {
                 Debug.Log("Pink/red cheat");
                 AI other;

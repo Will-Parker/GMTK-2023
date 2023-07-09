@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  isTableCards: 0
 --- !u!1 &15475032
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,6 +611,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  isTableCards: 0
 --- !u!114 &232584269 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8360950914568307470, guid: 7f20092ca7d78d442b8ce063a3827695, type: 3}
@@ -900,6 +902,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  isTableCards: 0
 --- !u!1 &642839042
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,6 +948,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  isTableCards: 0
 --- !u!1 &696460648
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,6 +1887,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 4592935343318516703, guid: f074f42c74454b64b8298889e80280f8, type: 3}
+  gm: {fileID: 0}
 --- !u!4 &1273083197
 Transform:
   m_ObjectHideFlags: 0
@@ -2667,6 +2672,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 4592935343318516703, guid: f074f42c74454b64b8298889e80280f8, type: 3}
+  gm: {fileID: 0}
 --- !u!4 &1642574748
 Transform:
   m_ObjectHideFlags: 0
@@ -3840,6 +3846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  isTableCards: 0
 --- !u!1 &6694592846971845402
 GameObject:
   m_ObjectHideFlags: 0
@@ -3887,6 +3894,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   card: {fileID: 4592935343318516703, guid: f074f42c74454b64b8298889e80280f8, type: 3}
+  gm: {fileID: 0}
 --- !u!114 &6792982279187314957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3900,3 +3908,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cards: []
+  isTableCards: 0
