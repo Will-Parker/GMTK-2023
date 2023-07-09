@@ -9,5 +9,11 @@ AnimatorOverrideController:
   m_Name: YellowWizard
   m_Controller: {fileID: 9100000, guid: 7e0d240689d00ce4fbe66cf2e935d017, type: 2}
   m_Clips:
+  - m_OriginalClip: {fileID: 7400000, guid: b793c19a72c113c40998d80889ce2aca, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 3c4891eb45b2d2747b6b34e90a6683ee, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: 2a56a93991da4f34d8cce2f2ef672ae4, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 6d3fb8d1add041f47891bb0ca6903133, type: 2}
+  - m_OriginalClip: {fileID: 7400000, guid: a9553b83dcb99b449b0049884972a8a7, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: 609cb4e554638c548884abcd474a50ac, type: 2}
   - m_OriginalClip: {fileID: 7400000, guid: 95cdc9ddd112cd14a9e3a4fa8a6d3eb8, type: 2}
-    m_OverrideClip: {fileID: 7400000, guid: f5cdb53a62b0a2441917a0f288015c77, type: 2}
+    m_OverrideClip: {fileID: 7400000, guid: d66fd200d4a1ad84885a7b4b80e6b978, type: 2}
