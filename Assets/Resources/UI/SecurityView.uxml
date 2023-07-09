@@ -1,0 +1,11 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="Background" style="flex-grow: 1; background-color: rgba(115, 37, 38, 0); align-items: center; justify-content: center; cursor: resource(&apos;Sprites/Participants/Yellow Wizard_neutral&apos;);">
+        <ui:VisualElement name="MainContainer" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: flex-end; justify-content: center; align-self: flex-end; width: 30%; flex-direction: column; height: 350px;">
+            <ui:ListView focusable="true" name="PlayerList" style="width: 80%; align-items: center; justify-content: flex-start; align-self: center; margin-left: 6px; margin-right: 6px; background-color: rgba(110, 57, 37, 0); border-left-color: rgba(49, 26, 17, 0); border-right-color: rgba(49, 26, 17, 0); border-top-color: rgba(49, 26, 17, 0); border-bottom-color: rgba(49, 26, 17, 0); border-left-width: 4px; border-right-width: 4px; border-top-width: 4px; border-bottom-width: 4px; border-top-left-radius: 15px; border-bottom-left-radius: 15px; border-top-right-radius: 15px; border-bottom-right-radius: 15px; height: 75%;" />
+            <ui:VisualElement name="InfoView" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: center; justify-content: center; height: auto; width: 80%; align-self: center;">
+                <ui:Label tabindex="-1" text="Label" display-tooltip-when-elided="true" name="CharacterName" />
+                <ui:VisualElement name="Info" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0); align-items: auto; width: 100%;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

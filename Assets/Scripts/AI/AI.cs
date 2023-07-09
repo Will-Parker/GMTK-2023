@@ -12,6 +12,8 @@ public class AI : MonoBehaviour
     [SerializeField] private AIType aiType; 
     public AIType GetAIType() { return aiType; }
 
+    [SerializeField] public AIState AiState;
+
     public AIActions? PrevAction { get; private set; }
 
     public int CurrentBet { get; private set; }
@@ -119,6 +121,7 @@ public class AI : MonoBehaviour
     {
         Idle,
         ActiveTurn,
+        Detained,
     }
 
     void Start()
