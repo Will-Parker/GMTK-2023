@@ -17,9 +17,10 @@ public class Dealer : MonoBehaviour
             foreach (AI ai in gm.GetGameParticipants())
             {
                 ai.tableCards.AddCard(Instantiate(card));
-                yield return new WaitForSeconds(0.2f);
+                //yield return new WaitForSeconds(0.2f);
             }
         }
+        yield return new WaitForSeconds(0.2f);
         gm.TransitionToNextPhase();
     }
 

@@ -31,6 +31,7 @@ public class AI : MonoBehaviour
 
     private Coroutine purpleCheatCoroutine;
     private Coroutine checkIfCanMoveCoroutine;
+    private Coroutine pinkRedCheatCoroutine;
 
     public GameManager gm;
 
@@ -119,7 +120,7 @@ public class AI : MonoBehaviour
     private void Start()
     {
         CurrentBet = 0;
-        if (aiType != AIType.Dealer)
+        if (aiType != AIType.Dealer || (aiColor != AIColor.Pink && aiColor != AIColor.Red))
         {
             checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
         }
@@ -133,7 +134,7 @@ public class AI : MonoBehaviour
             {
                 if (gm.TryAddParticipant(this))
                 {
-                    if (aiType != AIType.Dealer)
+                    if (aiType != AIType.Dealer || (aiColor != AIColor.Pink && aiColor != AIColor.Red))
                     {
                         checkIfCanMoveCoroutine = StartCoroutine(CheckIfCanMove());
                     }
@@ -254,6 +255,10 @@ public class AI : MonoBehaviour
         {
             purpleCheatCoroutine = StartCoroutine(PurpleCheat());
         }
+        if (aiColor == AIColor.Pink || aiColor == AIColor.Red)
+        {
+            pinkRedCheatCoroutine = StartCoroutine(PinkRedCheat());
+        }
     }
 
     public void PutDownHand()
@@ -332,6 +337,38 @@ public class AI : MonoBehaviour
                     hand = new Hand(CardCollection.HandQuality.Cheated);
                     StopCoroutine(purpleCheatCoroutine);
                     break;
+                }
+            }
+        }
+    }
+
+    private IEnumerator PinkRedCheat()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(3f, 5f));
+            if (aiState != AIState.Moving)
+            {
+                Debug.Log("Pink/red cheat");
+                AI other;
+                if (aiColor == AIColor.Pink)
+                {
+                    other = new List<AI>(FindObjectsOfType<AI>()).FindLast(ai => ai.aiColor == AIColor.Red);
+                }
+                else
+                {
+                    other = new List<AI>(FindObjectsOfType<AI>()).FindLast(ai => ai.aiColor == AIColor.Pink);
+                }
+                if (gm.GetGameParticipants().Max(p => p.CurrentBet) > 150)
+                {
+                    Anim.SetTrigger("Cheating1");
+                    gm.TrySwitchTables(other);
+                    
+                }
+                else
+                {
+                    Anim.SetTrigger("Cheating2");
+                    gm.TrySwitchTables(other);
                 }
             }
         }
