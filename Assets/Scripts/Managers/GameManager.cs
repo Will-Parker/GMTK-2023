@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
     [SerializeField] private List<AI> gameParticipants;
     private Queue<AI> gameParticipantsQueue;
     public List<AI> GetGameParticipants() { return gameParticipants; }
+    public List<GameObject> seats;
     private GamePhase gamePhase;
 
     public enum GamePhase
@@ -20,20 +20,15 @@ public class GameManager : MonoBehaviour
         Cleanup
     }
 
-    private void Awake()
-    {
-        if (instance == null)
-            instance = this;
-        else
-        {
-            Destroy(gameObject);
-            return;
-        }
-    }
-
     private void Start()
     {
         //Time.timeScale = 20f;
+        foreach (GameObject seat in seats)
+        {
+            AI participant = seat.GetComponentInChildren<AI>();
+            gameParticipants.Add(participant);
+            participant.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        }
     }
 
     private void Update()

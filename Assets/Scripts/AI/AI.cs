@@ -29,6 +29,8 @@ public class AI : MonoBehaviour
 
     private Coroutine purpleCheatCoroutine;
 
+    [SerializeField] private GameManager gm;
+
     public enum AIType
     {
         Normal,
@@ -95,6 +97,8 @@ public class AI : MonoBehaviour
     {
         Idle,
         ActiveTurn,
+        Moving,
+        Interrogation
     }
 
     private void Awake()
@@ -110,44 +114,9 @@ public class AI : MonoBehaviour
 
     private void Update()
     {
-        if (aiType == AIType.Dealer)
-            return;
-        if (aiType == AIType.Normal)
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                Anim.SetTrigger("BadHand");
-            }
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                Anim.SetTrigger("GoodHand");
-            }
-        }
-        if (aiType == AIType.Cheater)
-        {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
-            {
-                Anim.SetTrigger("Cheating1");
-            }
-            if (aiColor == AIColor.Pink || aiColor == AIColor.Red)
-            {
-                if (Input.GetKeyDown(KeyCode.Alpha2))
-                {
-                    Anim.SetTrigger("Cheating2");
-                }
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Anim.SetTrigger("Lose");
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            Anim.SetTrigger("Win");
-        }
-        if (Input.GetKeyDown(KeyCode.N))
-        {
-            Anim.SetTrigger("No Reaction");
+            Debug.Log("move guy");
         }
     }
 
@@ -158,9 +127,9 @@ public class AI : MonoBehaviour
         {
             case AIType.Normal:
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
-                float newRaiseWeight = hand.ActionWeights[AIActions.Raise] / (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newRaiseWeight = hand.ActionWeights[AIActions.Raise] / (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float newCheckWeight = hand.ActionWeights[AIActions.Check];
-                float newFoldWeight = hand.ActionWeights[AIActions.Fold] * (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newFoldWeight = hand.ActionWeights[AIActions.Fold] * (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float sum = newRaiseWeight + newCheckWeight + newFoldWeight;
                 float raiseChance = newRaiseWeight / sum;
                 float checkChance = newCheckWeight / sum;
@@ -176,9 +145,9 @@ public class AI : MonoBehaviour
                 break;
             case AIType.Cheater:
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
-                float newRaiseWeight2 = hand.ActionWeights[AIActions.Raise] / (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newRaiseWeight2 = hand.ActionWeights[AIActions.Raise] / (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float newCheckWeight2 = hand.ActionWeights[AIActions.Check];
-                float newFoldWeight2 = hand.ActionWeights[AIActions.Fold] * (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 10));
+                float newFoldWeight2 = hand.ActionWeights[AIActions.Fold] * (1 + (gm.GetGameParticipants().Max(p => p.CurrentBet) / 10));
                 float sum2 = newRaiseWeight2 + newCheckWeight2 + newFoldWeight2;
                 float raiseChance2 = newRaiseWeight2 / sum2;
                 float checkChance2 = newCheckWeight2 / sum2;
@@ -201,13 +170,13 @@ public class AI : MonoBehaviour
                 break;
         }
         aiState = AIState.Idle;
-        GameManager.instance.EndTurn();
+        gm.EndTurn();
     }
 
     private void Raise()
     {
         int prevBet = CurrentBet;
-        CurrentBet = GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) + (10 * Random.Range(1, 6));
+        CurrentBet = gm.GetGameParticipants().Max(p => p.CurrentBet) + (10 * Random.Range(1, 6));
         Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Raise;
@@ -216,7 +185,7 @@ public class AI : MonoBehaviour
     private void Check()
     {
         int prevBet = CurrentBet;
-        CurrentBet = GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet);
+        CurrentBet = gm.GetGameParticipants().Max(p => p.CurrentBet);
         Debug.Log("AI " + id + " Called bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Check;
