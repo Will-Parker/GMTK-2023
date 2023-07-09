@@ -142,6 +142,19 @@ public class AI : MonoBehaviour
                 }
             }
         }
+        if (AiState == AIState.Detained)
+        {
+            if (aiType == AIType.Cheater)
+            {
+                gm.gameParticipants.Remove(this);
+                gm.ResetGameParticipants();
+                Destroy(this.gameObject);
+            }
+            else
+            {
+                AiState = AIState.Idle;
+            }
+        }
     }
 
     public IEnumerator PerformTurn()
