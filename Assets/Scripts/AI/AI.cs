@@ -25,6 +25,10 @@ public class AI : MonoBehaviour
 
     public Animator Anim { get; private set; }
 
+    public AIState aiState;
+
+    private Coroutine purpleCheatCoroutine;
+
     public enum AIType
     {
         Normal,
@@ -52,43 +56,13 @@ public class AI : MonoBehaviour
 
     public struct Hand
     {
-        private CardCollection.HandQuality quality;
+        public CardCollection.HandQuality Quality { get; private set; }
         public float WinWeight { get; private set; }
         public Dictionary<AIActions, float> ActionWeights { get; private set; }
 
         public Hand(CardCollection.HandQuality quality)
         {
-            this.quality = quality;
-            ActionWeights = new Dictionary<AIActions, float> { { AIActions.Raise, 0 }, { AIActions.Check, 0 }, { AIActions.Fold, 0 } };
-            switch (quality)
-            {
-                case CardCollection.HandQuality.Good:
-                    WinWeight = 2;
-                    ActionWeights[AIActions.Raise] = 120;
-                    ActionWeights[AIActions.Check] = 30;
-                    ActionWeights[AIActions.Fold] = 1;
-                    break;
-                case CardCollection.HandQuality.Bad:
-                    WinWeight = 1;
-                    ActionWeights[AIActions.Raise] = 80;
-                    ActionWeights[AIActions.Check] = 30;
-                    ActionWeights[AIActions.Fold] = 5;
-                    break;
-                case CardCollection.HandQuality.Cheated:
-                    WinWeight = 3;
-                    ActionWeights[AIActions.Raise] = 500;
-                    ActionWeights[AIActions.Check] = 50;
-                    ActionWeights[AIActions.Fold] = 0;
-                    break;
-                default:
-                    WinWeight = 0;
-                    break;
-            }
-        }
-
-        public void UpdateHandQuality(CardCollection.HandQuality quality)
-        {
-            this.quality = quality;
+            this.Quality = quality;
             ActionWeights = new Dictionary<AIActions, float> { { AIActions.Raise, 0 }, { AIActions.Check, 0 }, { AIActions.Fold, 0 } };
             switch (quality)
             {
@@ -179,7 +153,7 @@ public class AI : MonoBehaviour
 
     public IEnumerator PerformTurn()
     {
-        
+        aiState = AIState.ActiveTurn;
         switch (aiType)
         {
             case AIType.Normal:
@@ -204,7 +178,7 @@ public class AI : MonoBehaviour
                 yield return new WaitForSeconds(Random.Range(3f, 7f));
                 float newRaiseWeight2 = hand.ActionWeights[AIActions.Raise] / (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
                 float newCheckWeight2 = hand.ActionWeights[AIActions.Check];
-                float newFoldWeight2 = hand.ActionWeights[AIActions.Fold] * (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 20));
+                float newFoldWeight2 = hand.ActionWeights[AIActions.Fold] * (1 + (GameManager.instance.GetGameParticipants().Max(p => p.CurrentBet) / 10));
                 float sum2 = newRaiseWeight2 + newCheckWeight2 + newFoldWeight2;
                 float raiseChance2 = newRaiseWeight2 / sum2;
                 float checkChance2 = newCheckWeight2 / sum2;
@@ -226,7 +200,7 @@ public class AI : MonoBehaviour
                 PrevAction = AIActions.Raise;
                 break;
         }
-        Debug.Log("End Turn");
+        aiState = AIState.Idle;
         GameManager.instance.EndTurn();
     }
 
@@ -284,12 +258,18 @@ public class AI : MonoBehaviour
             }
         }
         hand = new Hand(handQuality);
+        if (aiColor == AIColor.Purple)
+        {
+            purpleCheatCoroutine = StartCoroutine(PurpleCheat());
+        }
     }
 
     public void PutDownHand()
     {
         if (aiType != AIType.Dealer)
             Anim.SetBool("isHoldingCards", false);
+        if (aiColor == AIColor.Purple)
+            StopCoroutine(purpleCheatCoroutine);
         Card[] cards = handCards.RemoveAllCards();
         tableCards.AddCards(cards);
         foreach (Card card in cards)
@@ -305,11 +285,37 @@ public class AI : MonoBehaviour
 
     public void CleanArea()
     {
-        handCards.RemoveAllCards();
-        tableCards.RemoveAllCards();
+        foreach (Card card in handCards.RemoveAllCards())
+        {
+            Destroy(card.gameObject);
+        }
+        foreach (Card card in tableCards.RemoveAllCards())
+        {
+            Destroy(card.gameObject);
+        }
         bettingPool.RemoveAllCoins();
         CurrentBet = 0;
         PrevAction = null;
+    }
+
+    private IEnumerator PurpleCheat()
+    {
+        float purpleCheatOdds = hand.Quality == CardCollection.HandQuality.Good ? 0.02f : 0.1f;
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(2f, 4f));
+            if (aiState != AIState.ActiveTurn)
+            {
+                if (Random.Range(0f, 1f) < purpleCheatOdds)
+                {
+                    Debug.Log("Purple Cheated");
+                    Anim.SetTrigger("Cheating1");
+                    hand = new Hand(CardCollection.HandQuality.Cheated);
+                    StopCoroutine(purpleCheatCoroutine);
+                    break;
+                }
+            }
+        }
     }
 
     private bool IsValInRange(float val, float minInclusive, float maxInclusive)
