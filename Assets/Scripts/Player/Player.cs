@@ -15,12 +15,13 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        CurrentScreen = screen.CurrentScreen;
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
-            CurrentScreen = screen.NextScreen();
+            screen.NextScreen();
         } else if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            CurrentScreen = screen.PrevScreen();
+            screen.PrevScreen();
         } else if(Input.GetMouseButtonDown(0))
         {
             string ButtonName = "None";
@@ -33,10 +34,10 @@ public class Player : MonoBehaviour
             switch (ButtonName)
             {
                 case "NextButton":
-                    CurrentScreen = screen.NextScreen();
+                    screen.NextScreen();
                     break;
                 case "PrevButton":
-                    CurrentScreen = screen.PrevScreen();
+                    screen.PrevScreen();
                     break;
             }
         }
