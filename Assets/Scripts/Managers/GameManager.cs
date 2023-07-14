@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public List<Seat> seats;
     private GamePhase gamePhase;
     public GameManager otherGame;
+    public int gameID;
 
     public enum GamePhase
     {

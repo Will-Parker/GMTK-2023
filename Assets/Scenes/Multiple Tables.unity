@@ -1290,6 +1290,10 @@ PrefabInstance:
       value: Table Group 2
       objectReference: {fileID: 0}
     - target: {fileID: 6464540512716953040, guid: 87321550025646f45b19cdf3d08ec1a1, type: 3}
+      propertyPath: gameID
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6464540512716953040, guid: 87321550025646f45b19cdf3d08ec1a1, type: 3}
       propertyPath: otherGame
       value: 
       objectReference: {fileID: 1883834320}
@@ -2320,6 +2324,10 @@ PrefabInstance:
     - target: {fileID: 6268870555556105633, guid: 87321550025646f45b19cdf3d08ec1a1, type: 3}
       propertyPath: m_LocalPosition.y
       value: 1.62
+      objectReference: {fileID: 0}
+    - target: {fileID: 6464540512716953040, guid: 87321550025646f45b19cdf3d08ec1a1, type: 3}
+      propertyPath: gameID
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6464540512716953040, guid: 87321550025646f45b19cdf3d08ec1a1, type: 3}
       propertyPath: otherGame
