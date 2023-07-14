@@ -923,6 +923,26 @@ MonoBehaviour:
     introClip: {fileID: 0}
     source: {fileID: 0}
     isPlaying: 0
+  - name: Correct
+    type: 1
+    clip: {fileID: 8300000, guid: b810df246fbfa3c47bd8041908c6de74, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    hasIntro: 0
+    introClip: {fileID: 0}
+    source: {fileID: 0}
+    isPlaying: 0
+  - name: Wrong
+    type: 1
+    clip: {fileID: 8300000, guid: d29cdef65305811439d9c411b734ba19, type: 3}
+    volume: 0.3
+    pitch: 1
+    loop: 0
+    hasIntro: 0
+    introClip: {fileID: 0}
+    source: {fileID: 0}
+    isPlaying: 0
 --- !u!4 &1171323174
 Transform:
   m_ObjectHideFlags: 0

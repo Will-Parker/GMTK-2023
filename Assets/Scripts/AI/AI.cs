@@ -147,6 +147,7 @@ public class AI : MonoBehaviour
         {
             if (aiType == AIType.Cheater)
             {
+                AudioManager.instance.Play("Correct");
                 if (performTurnCoroutine != null)
                 {
                     StopCoroutine(performTurnCoroutine);
@@ -160,6 +161,7 @@ public class AI : MonoBehaviour
             }
             else
             {
+                AudioManager.instance.Play("Wrong");
                 FindObjectOfType<WinLoseTracker>().remainingGameLength -= 180 * 1000;
                 AiState = AIState.Idle;
             }
