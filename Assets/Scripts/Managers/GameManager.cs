@@ -191,6 +191,11 @@ public class GameManager : MonoBehaviour
     public void ResetGameParticipants()
     {
         AI currPlayer = gameParticipantsQueue.Peek();
+        while (!gameParticipants.Exists(a => a == currPlayer))
+        {
+            gameParticipantsQueue.Dequeue();
+            currPlayer = gameParticipantsQueue.Peek();
+        }
         List<AI> arrCopy = new List<AI>(gameParticipants);
         List<AI> temp = new List<AI>();
         while (arrCopy.Count > 0)
