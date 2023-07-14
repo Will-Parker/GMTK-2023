@@ -5,10 +5,6 @@ using UnityEngine.SceneManagement;
 
 public class GameScreen : MonoBehaviour
 {
-    private void Start()
-    {
-        AudioManager.instance.Play("Music");
-    }
     public void LoadGame()
     {
         AudioManager.instance.Play("Button");

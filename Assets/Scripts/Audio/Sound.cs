@@ -32,6 +32,9 @@ public class Sound
 
     [HideInInspector]
     public AudioSource source;
+
+    [HideInInspector]
+    public bool isPlaying;
 }
 
 public enum SoundType
