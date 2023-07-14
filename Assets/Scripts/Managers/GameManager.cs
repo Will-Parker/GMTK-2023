@@ -54,7 +54,7 @@ public class GameManager : MonoBehaviour
                 if (gameParticipantsQueue.Peek().TryGetComponent<Dealer>(out _))
                 {
                     gamePhase = GamePhase.Game;
-                    StartCoroutine(gameParticipantsQueue.Peek().PerformTurn());
+                    gameParticipantsQueue.Peek().performTurnCoroutine = StartCoroutine(gameParticipantsQueue.Peek().PerformTurn());
                 }
                 else
                     Debug.LogError("Dealer not first in Queue");
@@ -100,7 +100,7 @@ public class GameManager : MonoBehaviour
                 AI nextPotentialActiveParticipant = gameParticipantsQueue.Peek();
                 if (nextPotentialActiveParticipant.GetAIType() != AI.AIType.Dealer)
                 {
-                    StartCoroutine(nextPotentialActiveParticipant.PerformTurn());
+                    nextPotentialActiveParticipant.performTurnCoroutine = StartCoroutine(nextPotentialActiveParticipant.PerformTurn());
                     return;
                 }
                 gameParticipantsQueue.Enqueue(gameParticipantsQueue.Dequeue());

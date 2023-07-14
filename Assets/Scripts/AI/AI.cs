@@ -32,6 +32,7 @@ public class AI : MonoBehaviour
     private Coroutine purpleCheatCoroutine;
     private Coroutine checkIfCanMoveCoroutine;
     private Coroutine pinkRedCheatCoroutine;
+    public Coroutine performTurnCoroutine;
 
     public GameManager gm;
 
@@ -146,6 +147,13 @@ public class AI : MonoBehaviour
         {
             if (aiType == AIType.Cheater)
             {
+                if (performTurnCoroutine != null)
+                {
+                    StopCoroutine(performTurnCoroutine);
+                    AiState = AIState.Idle;
+                    performTurnCoroutine = null;
+                    gm.EndTurn();
+                }
                 gm.gameParticipants.Remove(this);
                 gm.ResetGameParticipants();
                 Destroy(this.gameObject);
@@ -208,6 +216,7 @@ public class AI : MonoBehaviour
                 break;
         }
         AiState = AIState.Idle;
+        performTurnCoroutine = null;
         gm.EndTurn();
     }
 

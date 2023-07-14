@@ -892,6 +892,7 @@ MonoBehaviour:
     hasIntro: 0
     introClip: {fileID: 0}
     source: {fileID: 0}
+    isPlaying: 0
   - name: Card
     type: 1
     clip: {fileID: 8300000, guid: 641d06effdfa9eb45b8bd8106be5b633, type: 3}
@@ -901,6 +902,7 @@ MonoBehaviour:
     hasIntro: 0
     introClip: {fileID: 0}
     source: {fileID: 0}
+    isPlaying: 0
   - name: Button
     type: 1
     clip: {fileID: 8300000, guid: 7f70fc8aa2e18b242a2ce6fe9b88978e, type: 3}
@@ -910,6 +912,7 @@ MonoBehaviour:
     hasIntro: 0
     introClip: {fileID: 0}
     source: {fileID: 0}
+    isPlaying: 0
   - name: Chips
     type: 1
     clip: {fileID: 8300000, guid: bea1de814ede75c4bb11f08b56bc26d9, type: 3}
@@ -919,6 +922,7 @@ MonoBehaviour:
     hasIntro: 0
     introClip: {fileID: 0}
     source: {fileID: 0}
+    isPlaying: 0
 --- !u!4 &1171323174
 Transform:
   m_ObjectHideFlags: 0
