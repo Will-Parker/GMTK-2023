@@ -24,6 +24,7 @@ public class Screen : MonoBehaviour
     {
         if(CurrentScreen == 0)
         {
+            AudioManager.instance.Play("Switch Camera");
             CurrentScreen = 1;
             ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }
@@ -33,6 +34,7 @@ public class Screen : MonoBehaviour
     {
         if (CurrentScreen == 1)
         {
+            AudioManager.instance.Play("Switch Camera");
             CurrentScreen = 0;
             ScreenRenderer.sharedMaterial = ScreenMats[CurrentScreen];
         }

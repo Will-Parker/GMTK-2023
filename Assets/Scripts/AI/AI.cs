@@ -366,15 +366,18 @@ public class AI : MonoBehaviour
 
     private IEnumerator PurpleCheat()
     {
-        float purpleCheatOdds = hand.Quality == CardCollection.HandQuality.Good ? 0.02f : 0.1f;
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(2f, 4f));
+            float purpleCheatOdds = hand.Quality == CardCollection.HandQuality.Good ? 0.02f : 0.1f;
+            purpleCheatOdds *= gm.GetGameParticipants().Max(p => p.CurrentBet) * 0.1f;
             if (AiState != AIState.ActiveTurn)
             {
+                Debug.Log(aiColor + " attempt cheat");
+                Debug.Log(purpleCheatOdds);
                 if (Random.Range(0f, 1f) < purpleCheatOdds)
                 {
-                    Debug.Log("Purple Cheated");
+                    Debug.Log(aiColor + " convey cheat");
                     Anim.SetTrigger("Cheating1");
                     hand = new Hand(CardCollection.HandQuality.Cheated);
                     StopCoroutine(purpleCheatCoroutine);
@@ -391,7 +394,7 @@ public class AI : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(5f, 7f));
             if (AiState != AIState.Moving)
             {
-                Debug.Log("Pink/red cheat");
+                Debug.Log(aiColor + " attempt cheat");
                 AI other;
                 if (aiColor == AIColor.Pink)
                 {
@@ -401,17 +404,24 @@ public class AI : MonoBehaviour
                 {
                     other = new List<AI>(FindObjectsOfType<AI>()).FindLast(ai => ai.aiColor == AIColor.Pink);
                 }
+
                 if (gm.GetGameParticipants().Max(p => p.CurrentBet) > 150)
                 {
-                    if (Random.Range(0f, 1f) < 0.2f)
+                    if (Random.Range(0f, 1f) < 0.5f)
+                    {
                         Anim.SetTrigger("Cheating1");
-                    gm.TrySwitchTables(other);
+                        Debug.Log(aiColor + " convey positive cheat");
+                        if (other != null)
+                            gm.TrySwitchTables(other);
+                    }
                 }
                 else
                 {
-                    if (Random.Range(0f, 1f) < 0.2f)
+                    if (Random.Range(0f, 1f) < 0.1f)
+                    {
                         Anim.SetTrigger("Cheating2");
-                    gm.TrySwitchTables(other);
+                        Debug.Log(aiColor + " convey negative cheat");
+                    }
                 }
             }
         }
