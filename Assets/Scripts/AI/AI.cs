@@ -155,6 +155,7 @@ public class AI : MonoBehaviour
                     performTurnCoroutine = null;
                     gm.EndTurn();
                 }
+                CleanArea();
                 gm.gameParticipants.Remove(this);
                 gm.ResetGameParticipants();
                 Destroy(this.gameObject);
