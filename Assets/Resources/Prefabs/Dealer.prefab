@@ -124,4 +124,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51c8db910f321c4abe0d69e0060af6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  card: {fileID: 4592935343318516703, guid: f074f42c74454b64b8298889e80280f8, type: 3}
+  cards:
+  - {fileID: 1741378018235333341, guid: 35e5a3a51647a7f42b06ce2bd655eee3, type: 3}
+  - {fileID: 7157483621065051141, guid: 3e153b0a8258ba44a9f464cd7202e812, type: 3}
+  - {fileID: 378905065831740690, guid: e81bfbb63681e354586059bc44ae6687, type: 3}
+  - {fileID: 2168549605556754165, guid: 83c3ccc834b29c943bc58adb8fd1f765, type: 3}
+  gm: {fileID: 0}

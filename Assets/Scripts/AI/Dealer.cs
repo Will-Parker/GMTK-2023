@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Dealer : MonoBehaviour
 {
-    [SerializeField] private Card card;
+    [SerializeField] private Card[] cards;
 
     private const int NumCardsToDeal = 2;
 
@@ -18,7 +18,7 @@ public class Dealer : MonoBehaviour
             {
                 foreach (AI ai in gm.GetGameParticipants())
                 {
-                    ai.tableCards.AddCard(Instantiate(card));
+                    ai.tableCards.AddCard(Instantiate(cards[Random.Range(0, 4)]));
                     if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
                     {
                         AudioManager.instance.Play("Card");
@@ -31,7 +31,7 @@ public class Dealer : MonoBehaviour
         finally
         {
             gm.GetGameParticipants().ForEach(ai => ai.CleanArea());
-            gm.GetGameParticipants().ForEach(ai => ai.tableCards.AddCards(new Card[] { Instantiate(card), Instantiate(card) }));
+            gm.GetGameParticipants().ForEach(ai => ai.tableCards.AddCards(new Card[] { Instantiate(cards[Random.Range(0, 4)]), Instantiate(cards[Random.Range(0, 4)]) }));
             gm.TransitionToNextPhase();
         }
     }
@@ -40,8 +40,8 @@ public class Dealer : MonoBehaviour
     {
         for (int i = 0; i < NumCardsToDeal; i++)
         {
-            participant.tableCards.AddCard(Instantiate(card));
-            yield return new WaitForSeconds(0.2f);
+            participant.tableCards.AddCard(Instantiate(cards[Random.Range(0, 4)]));
+            yield return new WaitForSeconds(0.5f);
         }
         gm.ResetGameParticipants();
         participant.PickUpHand();
