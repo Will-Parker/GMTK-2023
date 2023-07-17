@@ -10,7 +10,8 @@ public class WinLoseTracker : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        remainingGameLength = gameLength * 1000;
+        //Time.timeScale = 20f;
+        remainingGameLength = gameLength;
     }
 
     // Update is called once per frame

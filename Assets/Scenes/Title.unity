@@ -896,7 +896,7 @@ MonoBehaviour:
   - name: Card
     type: 1
     clip: {fileID: 8300000, guid: 641d06effdfa9eb45b8bd8106be5b633, type: 3}
-    volume: 0.3
+    volume: 0.7
     pitch: 1
     loop: 0
     hasIntro: 0

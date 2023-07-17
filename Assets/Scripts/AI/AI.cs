@@ -158,12 +158,13 @@ public class AI : MonoBehaviour
                 CleanArea();
                 gm.gameParticipants.Remove(this);
                 gm.ResetGameParticipants();
+                StopAllCoroutines();
                 Destroy(this.gameObject);
             }
             else
             {
                 AudioManager.instance.Play("Wrong");
-                FindObjectOfType<WinLoseTracker>().remainingGameLength -= 180 * 1000;
+                FindObjectOfType<WinLoseTracker>().remainingGameLength -= 180;
                 AiState = AIState.Idle;
             }
         }
@@ -254,6 +255,8 @@ public class AI : MonoBehaviour
 
     public void PickUpHand()
     {
+        if (aiType != AIType.Dealer)
+            Anim.ResetTrigger("No Reaction");
         Card[] cards = tableCards.RemoveAllCards();
         foreach (Card card in cards)
         {
@@ -318,7 +321,8 @@ public class AI : MonoBehaviour
 
     public void CleanArea()
     {
-        
+        if (aiType != AIType.Dealer)
+            Anim.SetTrigger("No Reaction");
         foreach (Card card in handCards.RemoveAllCards())
         {
             Destroy(card.gameObject);
@@ -345,10 +349,12 @@ public class AI : MonoBehaviour
 
     private IEnumerator CheckIfCanMove()
     {
-        float odds = 1f;
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(1f, 2f));
+            float odds = 0.2f;
+            if (PrevAction == AIActions.Fold)
+                odds *= 2f;
             if (AiState == AIState.Idle)
             {
                 if (Random.Range(0f, 1f) < odds)

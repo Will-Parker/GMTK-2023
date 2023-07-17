@@ -30,6 +30,17 @@ public class GameManager : MonoBehaviour
         {
             TryAddParticipant(participant);
         }
+        StartCoroutine(WaitToStart());
+    }
+
+    private IEnumerator WaitToStart()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+
         TransitionToNextPhase();
     }
 
@@ -111,6 +122,11 @@ public class GameManager : MonoBehaviour
 
     public bool TrySwitchTables(AI participant)
     {
+        if (FindObjectsOfType<AI>().Any(ai => ai.AiState == AI.AIState.Moving))
+        {
+            Debug.Log("Don't try moving when someone else is moving :)");
+            return false;
+        }
         if (participant.PrevAction == AI.AIActions.Fold || gamePhase == GamePhase.NoActiveGame)
         {
             if (otherGame.gamePhase == GamePhase.NoActiveGame)
@@ -122,6 +138,11 @@ public class GameManager : MonoBehaviour
                         Seat currSeat = seats.Find(x => x.id == participant.id);
                         
                         int a = participant.CurrentBet;
+                        if (FindObjectsOfType<AI>().Any(ai => ai.AiState == AI.AIState.Moving))
+                        {
+                            Debug.Log("Don't try moving when someone else is moving :)");
+                            return false;
+                        }
                         participant.bettingPool.RemoveAllCoins();
                         gameParticipants[0].bettingPool.AddCoins(a / 10);
                         gameParticipants[0].CurrentBet = a;
@@ -139,6 +160,11 @@ public class GameManager : MonoBehaviour
                         Seat currSeat = seats.Find(x => x.id == participant.id);
 
                         int a = participant.CurrentBet;
+                        if (FindObjectsOfType<AI>().Any(ai => ai.AiState == AI.AIState.Moving))
+                        {
+                            Debug.Log("Don't try moving when someone else is moving :)");
+                            return false;
+                        }
                         participant.bettingPool.RemoveAllCoins();
                         gameParticipants[0].bettingPool.AddCoins(a / 10);
                         gameParticipants[0].CurrentBet = a;
@@ -175,18 +201,30 @@ public class GameManager : MonoBehaviour
         {
             if (Vector3.Distance(participant.transform.position, seat.transform.position) <= 0.1)
             {
-                seat.AddParticipant(participant);
-                gameParticipants.Add(participant);
-                participant.gm = this;
-                if (gamePhase == GamePhase.Game)
-                {
-                    if (gameParticipants[0].TryGetComponent(out Dealer dealer))
-                        StartCoroutine(dealer.DealCards(participant));
-                }
+                StartCoroutine(AddParticipant(participant, seat));
                 return true;
             }
         }
         return false;
+    }
+
+    public IEnumerator AddParticipant(AI participant, Seat seat)
+    {
+        yield return new WaitUntil(() => gamePhase == GamePhase.NoActiveGame || gamePhase == GamePhase.Game);
+        seat.AddParticipant(participant);
+        gameParticipants.Add(participant);
+        participant.gm = this;
+        participant.transform.localPosition = Vector3.zero;
+        //yield return new WaitForEndOfFrame();
+        //yield return new WaitForEndOfFrame();
+        //yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.5f);
+        participant.transform.localEulerAngles = Vector3.zero;
+        if (gamePhase == GamePhase.Game)
+        {
+            if (gameParticipants[0].TryGetComponent(out Dealer dealer))
+                StartCoroutine(dealer.DealCards(participant));
+        }
     }
 
     public void ResetGameParticipants()
@@ -264,7 +302,7 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator HandleWin(AI winner)
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         int earnings = 0;
         foreach (AI participant in gameParticipants)
         {
@@ -289,12 +327,10 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator CleanTable()
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(3f);
         foreach (AI participant in gameParticipants)
         {
             participant.CleanArea();
-            if (participant.GetAIType() != AI.AIType.Dealer)
-                participant.Anim.SetTrigger("No Reaction");
         }
         TransitionToNextPhase();
     }

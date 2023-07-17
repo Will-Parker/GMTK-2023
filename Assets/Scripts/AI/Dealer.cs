@@ -12,16 +12,28 @@ public class Dealer : MonoBehaviour
 
     public IEnumerator DealCards()
     {
-        for (int i = 0; i < NumCardsToDeal; i++)
+        try
         {
-            foreach (AI ai in gm.GetGameParticipants())
+            for (int i = 0; i < NumCardsToDeal; i++)
             {
-                ai.tableCards.AddCard(Instantiate(card));
-                //yield return new WaitForSeconds(0.2f);
+                foreach (AI ai in gm.GetGameParticipants())
+                {
+                    ai.tableCards.AddCard(Instantiate(card));
+                    if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+                    {
+                        AudioManager.instance.Play("Card");
+                    }
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
+            yield return new WaitForSeconds(1f);
         }
-        yield return new WaitForSeconds(0.2f);
-        gm.TransitionToNextPhase();
+        finally
+        {
+            gm.GetGameParticipants().ForEach(ai => ai.CleanArea());
+            gm.GetGameParticipants().ForEach(ai => ai.tableCards.AddCards(new Card[] { Instantiate(card), Instantiate(card) }));
+            gm.TransitionToNextPhase();
+        }
     }
 
     public IEnumerator DealCards(AI participant)
