@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
         } else if(Input.GetKeyDown(KeyCode.LeftArrow))
         {
             screen.PrevScreen();
-        } else if(Input.GetMouseButtonDown(0))
+        } /*else if(Input.GetMouseButtonDown(0))
         {
             string ButtonName = "None";
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -40,8 +40,17 @@ public class Player : MonoBehaviour
                     screen.PrevScreen();
                     break;
             }
-        }
+        }*/
 
     }
 
+    public void Screen1()
+    {
+        screen.PrevScreen();
+    }
+
+    public void Screen2()
+    {
+        screen.NextScreen();
+    }
 }

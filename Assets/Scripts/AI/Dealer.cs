@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Dealer : MonoBehaviour
 {
-    [SerializeField] private Card card;
+    [SerializeField] private Card[] cards;
 
     private const int NumCardsToDeal = 2;
 
@@ -12,24 +12,36 @@ public class Dealer : MonoBehaviour
 
     public IEnumerator DealCards()
     {
-        for (int i = 0; i < NumCardsToDeal; i++)
+        try
         {
-            foreach (AI ai in gm.GetGameParticipants())
+            for (int i = 0; i < NumCardsToDeal; i++)
             {
-                ai.tableCards.AddCard(Instantiate(card));
-                //yield return new WaitForSeconds(0.2f);
+                foreach (AI ai in gm.GetGameParticipants())
+                {
+                    ai.tableCards.AddCard(Instantiate(cards[Random.Range(0, 4)]));
+                    if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+                    {
+                        AudioManager.instance.Play("Card");
+                    }
+                    yield return new WaitForSeconds(0.5f);
+                }
             }
+            yield return new WaitForSeconds(1f);
         }
-        yield return new WaitForSeconds(0.2f);
-        gm.TransitionToNextPhase();
+        finally
+        {
+            gm.GetGameParticipants().ForEach(ai => ai.CleanArea());
+            gm.GetGameParticipants().ForEach(ai => ai.tableCards.AddCards(new Card[] { Instantiate(cards[Random.Range(0, 4)]), Instantiate(cards[Random.Range(0, 4)]) }));
+            gm.TransitionToNextPhase();
+        }
     }
 
     public IEnumerator DealCards(AI participant)
     {
         for (int i = 0; i < NumCardsToDeal; i++)
         {
-            participant.tableCards.AddCard(Instantiate(card));
-            yield return new WaitForSeconds(0.2f);
+            participant.tableCards.AddCard(Instantiate(cards[Random.Range(0, 4)]));
+            yield return new WaitForSeconds(0.5f);
         }
         gm.ResetGameParticipants();
         participant.PickUpHand();

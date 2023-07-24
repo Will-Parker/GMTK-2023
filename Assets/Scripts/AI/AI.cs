@@ -32,6 +32,7 @@ public class AI : MonoBehaviour
     private Coroutine purpleCheatCoroutine;
     private Coroutine checkIfCanMoveCoroutine;
     private Coroutine pinkRedCheatCoroutine;
+    public Coroutine performTurnCoroutine;
 
     public GameManager gm;
 
@@ -146,13 +147,24 @@ public class AI : MonoBehaviour
         {
             if (aiType == AIType.Cheater)
             {
+                AudioManager.instance.Play("Correct");
+                if (performTurnCoroutine != null)
+                {
+                    StopCoroutine(performTurnCoroutine);
+                    AiState = AIState.Idle;
+                    performTurnCoroutine = null;
+                    gm.EndTurn();
+                }
+                CleanArea();
                 gm.gameParticipants.Remove(this);
                 gm.ResetGameParticipants();
+                StopAllCoroutines();
                 Destroy(this.gameObject);
             }
             else
             {
-                FindObjectOfType<WinLoseTracker>().remainingGameLength -= 180 * 1000;
+                AudioManager.instance.Play("Wrong");
+                FindObjectOfType<WinLoseTracker>().remainingGameLength -= 180;
                 AiState = AIState.Idle;
             }
         }
@@ -208,6 +220,7 @@ public class AI : MonoBehaviour
                 break;
         }
         AiState = AIState.Idle;
+        performTurnCoroutine = null;
         gm.EndTurn();
     }
 
@@ -218,7 +231,8 @@ public class AI : MonoBehaviour
         //Debug.Log("AI " + id + " Raised bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Raise;
-        AudioManager.instance.Play("Chips");
+        if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+            AudioManager.instance.Play("Chips");
     }
 
     private void Check()
@@ -228,7 +242,8 @@ public class AI : MonoBehaviour
         //Debug.Log("AI " + id + " Called bet to " + CurrentBet);
         bettingPool.AddCoins((CurrentBet - prevBet) / 10);
         PrevAction = AIActions.Check;
-        AudioManager.instance.Play("Chips");
+        if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+            AudioManager.instance.Play("Chips");
     }
 
     private void Fold()
@@ -240,6 +255,8 @@ public class AI : MonoBehaviour
 
     public void PickUpHand()
     {
+        if (aiType != AIType.Dealer)
+            Anim.ResetTrigger("No Reaction");
         Card[] cards = tableCards.RemoveAllCards();
         foreach (Card card in cards)
         {
@@ -275,7 +292,8 @@ public class AI : MonoBehaviour
         {
             pinkRedCheatCoroutine = StartCoroutine(PinkRedCheat());
         }
-        AudioManager.instance.Play("Card");
+        if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+            AudioManager.instance.Play("Card");
     }
 
     public void PutDownHand()
@@ -290,18 +308,21 @@ public class AI : MonoBehaviour
         {
             card.GetComponentsInChildren<MeshRenderer>().All(mr => mr.enabled = true);
         }
-        AudioManager.instance.Play("Card");
+        if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+            AudioManager.instance.Play("Card");
     }
 
     public void Reveal()
     {
         tableCards.FlipAllCards();
-        AudioManager.instance.Play("Card");
+        if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+            AudioManager.instance.Play("Card");
     }
 
     public void CleanArea()
     {
-        
+        if (aiType != AIType.Dealer)
+            Anim.SetTrigger("No Reaction");
         foreach (Card card in handCards.RemoveAllCards())
         {
             Destroy(card.gameObject);
@@ -313,8 +334,11 @@ public class AI : MonoBehaviour
         bettingPool.RemoveAllCoins();
         CurrentBet = 0;
         PrevAction = null;
-        AudioManager.instance.Play("Card");
-        AudioManager.instance.Play("Chips");
+        if (FindObjectOfType<Screen>().CurrentScreen == gm.gameID)
+        {
+            AudioManager.instance.Play("Card");
+            AudioManager.instance.Play("Chips");
+        }
     }
 
     public void MoveTo(Seat seat)
@@ -325,10 +349,12 @@ public class AI : MonoBehaviour
 
     private IEnumerator CheckIfCanMove()
     {
-        float odds = 1f;
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(1f, 2f));
+            float odds = 0.2f;
+            if (PrevAction == AIActions.Fold)
+                odds *= 2f;
             if (AiState == AIState.Idle)
             {
                 if (Random.Range(0f, 1f) < odds)
@@ -346,15 +372,18 @@ public class AI : MonoBehaviour
 
     private IEnumerator PurpleCheat()
     {
-        float purpleCheatOdds = hand.Quality == CardCollection.HandQuality.Good ? 0.02f : 0.1f;
         while (true)
         {
             yield return new WaitForSeconds(Random.Range(2f, 4f));
+            float purpleCheatOdds = hand.Quality == CardCollection.HandQuality.Good ? 0.02f : 0.1f;
+            purpleCheatOdds *= gm.GetGameParticipants().Max(p => p.CurrentBet) * 0.1f;
             if (AiState != AIState.ActiveTurn)
             {
+                Debug.Log(aiColor + " attempt cheat");
+                Debug.Log(purpleCheatOdds);
                 if (Random.Range(0f, 1f) < purpleCheatOdds)
                 {
-                    Debug.Log("Purple Cheated");
+                    Debug.Log(aiColor + " convey cheat");
                     Anim.SetTrigger("Cheating1");
                     hand = new Hand(CardCollection.HandQuality.Cheated);
                     StopCoroutine(purpleCheatCoroutine);
@@ -371,7 +400,7 @@ public class AI : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(5f, 7f));
             if (AiState != AIState.Moving)
             {
-                Debug.Log("Pink/red cheat");
+                Debug.Log(aiColor + " attempt cheat");
                 AI other;
                 if (aiColor == AIColor.Pink)
                 {
@@ -381,17 +410,24 @@ public class AI : MonoBehaviour
                 {
                     other = new List<AI>(FindObjectsOfType<AI>()).FindLast(ai => ai.aiColor == AIColor.Pink);
                 }
+
                 if (gm.GetGameParticipants().Max(p => p.CurrentBet) > 150)
                 {
-                    if (Random.Range(0f, 1f) < 0.2f)
+                    if (Random.Range(0f, 1f) < 0.5f)
+                    {
                         Anim.SetTrigger("Cheating1");
-                    gm.TrySwitchTables(other);
+                        Debug.Log(aiColor + " convey positive cheat");
+                        if (other != null)
+                            gm.TrySwitchTables(other);
+                    }
                 }
                 else
                 {
-                    if (Random.Range(0f, 1f) < 0.2f)
+                    if (Random.Range(0f, 1f) < 0.1f)
+                    {
                         Anim.SetTrigger("Cheating2");
-                    gm.TrySwitchTables(other);
+                        Debug.Log(aiColor + " convey negative cheat");
+                    }
                 }
             }
         }

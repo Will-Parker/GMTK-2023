@@ -22,7 +22,7 @@ public class Buttons : MonoBehaviour
     void Update()
     {
         List<Seat> TableList = gm[player.CurrentScreen].seats;
-        string ButtonName = "None";
+        /*string ButtonName = "None";
         if(Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -52,7 +52,7 @@ public class Buttons : MonoBehaviour
                     }
                     break;
             }
-        } else if(Input.GetKeyDown(KeyCode.Z))
+        } else */if(Input.GetKeyDown(KeyCode.Z))
         {
             if (TableList[0].participant != null && TableList.Count >= 1)
             {
@@ -84,5 +84,33 @@ public class Buttons : MonoBehaviour
         ai.AiState = AI.AIState.Detained;
         Debug.Log("AI " + ai.id + " has been " + ai.AiState);
         return;
+    }
+
+
+    public void Detain1()
+    {
+        List<Seat> TableList = gm[player.CurrentScreen].seats;
+        if (TableList[0].participant != null && TableList.Count >= 1)
+        {
+            DetainPlayer(TableList[0].participant);
+        }
+    }
+
+    public void Detain2()
+    {
+        List<Seat> TableList = gm[player.CurrentScreen].seats;
+        if (TableList[1].participant != null && TableList.Count >= 2)
+        {
+            DetainPlayer(TableList[1].participant);
+        }
+    }
+
+    public void Detain3()
+    {
+        List<Seat> TableList = gm[player.CurrentScreen].seats;
+        if (TableList[2].participant != null && TableList.Count >= 3)
+        {
+            DetainPlayer(TableList[2].participant);
+        }
     }
 }
